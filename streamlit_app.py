@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 st.set_page_config(page_title="מדד החירות בפסח", layout="wide")  
 
@@ -11,6 +12,12 @@ st.markdown("""
         direction: rtl;
         text-align: right;
         font-family: 'Arial', sans-serif;
+    }
+    .main .block-container {
+        padding-top: 2rem;
+    }
+    h1, h2, h3 {
+        color: #1E4B7A;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -36,14 +43,104 @@ with tab1:
 
     chart_data = pd.DataFrame({"אירוע": events, "מדד חירות": freedom_level, "הערה": funny_notes})
     st.subheader("מדד החירות לאורך יציאת מצרים")
+    
+    # יצירת גרף בסיסי
     fig = px.line(chart_data, x="אירוע", y="מדד חירות", text="הערה", markers=True)
-    fig.update_traces(textposition="top center")
+    
+    # עיצוב קו הגרף והסמנים
+    fig.update_traces(
+        line=dict(width=4, color='#1f77b4', dash='solid'),
+        marker=dict(size=12, symbol='circle', line=dict(width=2, color='darkblue')),
+        textposition="top center",
+        textfont=dict(size=14, family="Arial", color="#333333", weight="bold")
+    )
+    
+    # כדי שהטקסט לא יעלה על הקו, נזיז אותו קצת למעלה
+    for i, trace in enumerate(fig.data):
+        y_vals = trace.y
+        text_vals = trace.text
+        for j, (y, text) in enumerate(zip(y_vals, text_vals)):
+            # הוספת הערות נפרדות מעל הנקודות
+            fig.add_annotation(
+                x=j,
+                y=y + 0.8,  # הזזה מעל הנקודה
+                text=text,
+                showarrow=False,
+                font=dict(family="Arial", size=13, color="#333333"),
+                bgcolor="rgba(255, 255, 255, 0.8)",
+                bordercolor="#DDDDDD",
+                borderwidth=1,
+                borderpad=4,
+                align="center"
+            )
+        # מסירת הטקסט המקורי מהקו
+        trace.text = None
+    
+    # עיצוב כללי של הגרף
     fig.update_layout(
         yaxis_range=[0, 11],
-        font=dict(family="Arial", size=14),
-    
+        font=dict(family="Arial", size=14, color="#505050"),
+        title_font=dict(size=24, family="Arial", color="darkblue"),
+        plot_bgcolor='rgba(240,248,255,0.3)',  # רקע תכלת בהיר מאוד
+        paper_bgcolor='white',
+        xaxis=dict(
+            title="שלבי יציאת מצרים",
+            title_font=dict(size=16, color="#1E4B7A"),
+            tickfont=dict(size=14, color="#333333", family="Arial"),
+            gridcolor='rgba(200,200,200,0.2)',
+            zeroline=False
+        ),
+        yaxis=dict(
+            title="מדד החירות הדיגיטלי",
+            title_font=dict(size=16, color="#1E4B7A"),
+            tickfont=dict(size=14, color="#333333", family="Arial"),
+            gridcolor='rgba(200,200,200,0.5)',
+            zeroline=False
+        ),
+        margin=dict(l=20, r=20, t=40, b=80),
+        hovermode="x unified",
+        legend_title_font_color="#1E4B7A"
     )
+    
+    # הוספת אזורים מוצללים לפי רמות החירות
+    fig.add_hrect(
+        y0=0, y1=3, 
+        fillcolor="rgba(255,0,0,0.07)", 
+        layer="below", 
+        line_width=0,
+        annotation_text="אזור שעבוד",
+        annotation_position="bottom right",
+        annotation_font=dict(size=12, color="darkred")
+    )
+    
+    fig.add_hrect(
+        y0=3, y1=7, 
+        fillcolor="rgba(255,165,0,0.07)", 
+        layer="below", 
+        line_width=0,
+        annotation_text="אזור מעבר",
+        annotation_position="bottom right",
+        annotation_font=dict(size=12, color="darkorange")
+    )
+    
+    fig.add_hrect(
+        y0=7, y1=11, 
+        fillcolor="rgba(0,128,0,0.07)", 
+        layer="below", 
+        line_width=0,
+        annotation_text="אזור חירות",
+        annotation_position="bottom right",
+        annotation_font=dict(size=12, color="darkgreen")
+    )
+    
     st.plotly_chart(fig, use_container_width=True)
+    
+    st.markdown("""
+    <div style="background-color: rgba(240,248,255,0.5); padding: 10px; border-radius: 5px; border-left: 4px solid #1E4B7A; margin-top: 20px;">
+    <h4 style="color: #1E4B7A;">מסע הדאטה לחירות</h4>
+    <p>הגרף מציג את התפתחות רמת החירות הדיגיטלית בתהליך עבודה עם דאטה, מקביל לשלבי יציאת מצרים.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # טאב 2 – שאלון הבן הדאטאיסט
 with tab2:
