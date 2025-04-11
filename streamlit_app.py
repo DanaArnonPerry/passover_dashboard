@@ -13,7 +13,7 @@ st.markdown("""
         font-family: 'Arial', sans-serif;
     }
     </style>
-""", unsafe_allow_html=True)
+""", unsafe_allow_html=true)
 
 # טאבים לדשבורד
 tab1, tab2, tab3, tab4 = st.tabs(["📈 מדד החירות", "🧪 איזה בן דאטה אתה?", "🎲 מצה או דאטה", "👥 על היוצרים"])
@@ -45,7 +45,7 @@ with tab1:
         font=dict(family="Arial", size=14),
     
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=true)
     with st.expander("📜 טיימליין - מ-Row Data למצגת מצות"):
         timeline = [
             "1. שולחים CSV ממצרים – בלי שמות עמודות",
@@ -130,9 +130,9 @@ with tab4:
     **המוציא לפועל:** ChatGPT – רובוט צייתן עם חוש הומור בריא ואובססיה לדאטה סטים מוזרים מתקופת המקרא.
 
     **מאחורי הקלעים של השיחה:**
-    > “מחכה במכת חושך” 🌑  
-    > “עזוב, אני באנליסיס פרלסיס – קח שליטה במקומי”  
-    > “אני חיה את החלום” ☁️✨
+    > "מחכה במכת חושך" 🌑  
+    > "עזוב, אני באנליסיס פרלסיס – קח שליטה במקומי"  
+    > "אני חיה את החלום" ☁️✨
 
     **🎥 לצפייה בסרטון מאחורי הקלעים של הפרומפטים:**  
     [לחצו כאן כדי לצפות ביוטיוב](https://youtu.be/p89aR2z6B40?si=aMuLlleukoBXtyVA)
