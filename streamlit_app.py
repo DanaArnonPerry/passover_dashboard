@@ -481,7 +481,7 @@ with tab4:
     </blockquote>
 
     <p><strong>🎥 לצפייה בסרטון מאחורי הקלעים של הפרומפטים:</strong><br>  
-    <a href="https://youtu.be/p89aR2z6B40?si=aMuLlleukoBXtyVA">לחצו כאן כדי לצפות ביוטיוב</a></p>
+    <a href="https://youtu.be/yVnQN7UOu3A?si=2ibL5eztYYdzSTis">לחצו כאן כדי לצפות ביוטיוב</a></p>
 
     <p>זה הדשבורד הראשון שנכתב בצחוק, נבנה באהבה, ומוגש עם כף מרק של דאטה.<br> 
     חג חירות שמח! 🥳</p>
