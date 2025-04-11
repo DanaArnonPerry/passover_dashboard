@@ -304,16 +304,7 @@ with tab1:
         annotation_font=dict(size=12, color="darkred", family="Rubik, sans-serif")
     )
     
-    fig.add_hrect(
-        y0=3, y1=7, 
-        fillcolor="rgba(255,165,0,0.07)", 
-        layer="below", 
-        line_width=0,
-        annotation_text="אזור מעבר",
-        annotation_position="bottom right",
-        annotation_font=dict(size=12, color="darkorange", family="Rubik, sans-serif")
-    )
-    
+      
     fig.add_hrect(
         y0=7, y1=11, 
         fillcolor="rgba(0,128,0,0.07)", 
