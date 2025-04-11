@@ -165,7 +165,7 @@ with tab0:
     
     # אם יש לך לוגו, אפשר להציג אותו כאן
     # לדוגמה:
-    # logo_path = "path_to_logo.png"
+    # logo_path = "Logo.png"
     # st.image(logo_path, width=300)
     
     # או להשאיר מקום ללוגו שיטען מגיטהאב:
