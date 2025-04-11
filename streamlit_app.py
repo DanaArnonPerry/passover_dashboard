@@ -334,6 +334,9 @@ with tab1:
             tickfont=dict(size=12, color="#333333", family="Rubik, sans-serif"),  # גופן רוביק
             title_standoff=60,
             gridcolor='rgba(200,200,200,0.5)',
+            showline=True,   
+            linecolor='#000000',   
+            linewidth=2,     
             zeroline=False,
             domain=[0.02, 0.98],  # הגדלת אזור הגרף למעלה ולמטה
             range=[0, 11]
