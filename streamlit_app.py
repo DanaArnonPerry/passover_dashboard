@@ -314,10 +314,7 @@ with tab1:
             text=short_text,
             showarrow=False,
             yshift=15,
-            font=dict(family="Arial", size=13, color="#333333"),
-            bgcolor="rgba(255, 255, 255, 0.8)",
-            bordercolor="#DDDDDD",
-            borderwidth=1,
+            font=dict(family="Arial", size=13, color="#333333"),           
             borderpad=4,
             align="center"
         )
