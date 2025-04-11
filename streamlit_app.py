@@ -32,7 +32,7 @@ st.markdown("""
         font-family: 'Rubik', sans-serif;
     }
     
-    /* עיצוב כותרת וסידור עם לוגו בצד */
+    /* עיצוב לכרטיסיית הפתיח */
     .welcome-header {
         display: flex;
         justify-content: space-between;
@@ -43,16 +43,9 @@ st.markdown("""
         border-right: 5px solid #8000FF;
         margin-bottom: 20px;
     }
-
+    
     .welcome-title-container {
         flex: 1;
-    }
-
-    .logo-right {
-        margin-right: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
     
     .welcome-title {
@@ -69,6 +62,28 @@ st.markdown("""
         font-family: 'Rubik', sans-serif;
     }
     
+    .logo-right {
+        margin-right: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    
+    .feature-card {
+        background-color: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 15px;
+        font-family: 'Rubik', sans-serif;
+    }
+    
     /* עיצוב לשוניות (tabs) */
     .stTabs [data-baseweb="tab-list"] {
         gap: 2px;
@@ -77,7 +92,7 @@ st.markdown("""
         padding: 10px 5px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-
+    
     .stTabs [data-baseweb="tab"] {
         height: auto;
         white-space: pre-wrap;
@@ -89,19 +104,10 @@ st.markdown("""
         font-weight: 500;
         color: #333;
     }
-
+    
     .stTabs [aria-selected="true"] {
         background-color: #8000FF !important;
         color: white !important;
-    }
-    
-    .feature-card {
-        background-color: white;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        margin-bottom: 15px;
-        font-family: 'Rubik', sans-serif;
     }
     
     /* גישה אגרסיבית להסתרת undefined */
@@ -136,17 +142,15 @@ st.markdown("""
         
         .js-plotly-plot .plotly text {
             font-size: 10px !important;
-            font-family: 'Rubik', sans-serif !important;
         }
         
         .xtick text {
             text-overflow: ellipsis !important;
             max-width: 80px !important;
-            font-family: 'Rubik', sans-serif !important;
         }
         
         .welcome-header {
-            flex-direction: column-reverse;
+            flex-direction: column;
         }
         
         .logo-right {
@@ -186,7 +190,6 @@ tab0, tab1, tab2, tab3, tab4 = st.tabs(["🏠 ברוכים הבאים", "📈 מ
 
 # טאב 0 - פתיח וברכה
 with tab0:
-    # כותרת עם לוגו בצד שמאל
     st.markdown("""
     <div class="welcome-header">
         <div class="welcome-title-container">
@@ -224,7 +227,7 @@ with tab0:
         </div>
         """, unsafe_allow_html=True)
     
-    # טיפים לשימוש - ללא הצגת הטאבים
+    # טיפים לשימוש - גרסה מתוקנת ללא הלשוניות המוצגות
     st.markdown("""
     <div class="feature-card">
         <h3>טיפים לשימוש בדשבורד</h3>
@@ -280,12 +283,18 @@ with tab1:
     # יצירת גרף קבוע (לא רספונסיבי) לטלפון נייד
     fig = go.Figure()
     
-    # הוספת הקו והנקודות
+    # הוספת הקו והנקודות עם החלקה
     fig.add_trace(go.Scatter(
         x=events,
         y=freedom_level,
         mode='lines+markers',
-        line=dict(width=4, color='#000000', dash='solid', shape='spline', smoothing=1.3),
+        line=dict(
+            width=4, 
+            color='#000000', 
+            dash='solid', 
+            shape='spline',  # מוסיף החלקה לקו
+            smoothing=1.3    # מגדיר את רמת ההחלקה
+        ),
         marker=dict(size=12, symbol='circle', line=dict(width=2, color='#000000'))
     ))
     
@@ -349,19 +358,22 @@ with tab1:
         paper_bgcolor='white',
         font=dict(family="Rubik, sans-serif", size=14, color="#505050"),  # הגדרת גופן כללית
         xaxis=dict(
-            title="שלבי יציאת מצרים",  # הוספת כותרת לציר X
-            title_font=dict(size=16, color="#8000FF", family="Rubik, sans-serif"),
-            tickfont=dict(size=14, color="#333333", family="Rubik, sans-serif"),
             gridcolor='rgba(200,200,200,0.2)',
             zeroline=False,
             tickangle=-45,
+            title="שלבי יציאת מצרים",  # הוספת כותרת לציר X
+            title_font=dict(size=16, color="#8000FF", family="Rubik, sans-serif"),  # גופן רוביק
+            tickfont=dict(size=14, color="#333333", family="Rubik, sans-serif"),  # גופן רוביק
+            domain=[0.02, 0.98],  # הגדלת אזור הגרף בצדדים
+            fixedrange=True  # מניעת הזזה בציר X
         ),
         yaxis=dict(
             title="מדד החירות הדיגיטלי",
-            title_font=dict(size=16, color="#8000FF", family="Rubik, sans-serif"),
-            tickfont=dict(size=14, color="#333333", family="Rubik, sans-serif"),
+            title_font=dict(size=16, color="#8000FF", family="Rubik, sans-serif"),  # גופן רוביק
+            tickfont=dict(size=14, color="#333333", family="Rubik, sans-serif"),  # גופן רוביק
             gridcolor='rgba(200,200,200,0.5)',
             zeroline=False,
+            domain=[0.02, 0.98],  # הגדלת אזור הגרף למעלה ולמטה
             range=[0, 11]
         ),
         margin=dict(l=10, r=10, t=30, b=50),
@@ -380,7 +392,7 @@ with tab1:
     # הסבר נוסף אחרי הגרף
     st.markdown("""
     <div style="background-color: rgba(240,248,255,0.5); padding: 15px; border-radius: 5px; border-right: 4px solid #8000FF; margin-top: 20px; font-family: 'Rubik', sans-serif;">
-    <h4 style="color: #8000FF; margin-top: 0; font-family: 'Rubik', sans-serif;">המסע מעבדות לחירות בעולם הדאטה</h4>
+    <h4 style="color: #1E4B7A; margin-top: 0; font-family: 'Rubik', sans-serif;">המסע מעבדות לחירות בעולם הדאטה</h4>
     <p style="font-family: 'Rubik', sans-serif;">כפי שניתן לראות בגרף, האנליסט מתחיל את דרכו בעבודה ידנית מפרכת עם אקסלים, ממש כמו עבודת פרך במצרים.
     דרך תהליך אוטומציה הדרגתי, הוא עובר את ים הדיבאגים, עד שמגיע לחירות מלאה עם דשבורדים אוטומטיים ותובנות שמשנות את הארגון.</p>
     </div>
@@ -422,9 +434,52 @@ with tab2:
             else:
                 score += 0.5
 
-      if score >= 5:
+        if score >= 5:
             st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px;'>🧠 יצאת החכם – הדאטה אצלך בידיים טובות. אתה יודע לשאול, לבדוק ולבנות דשבורדים בזמן שכולם עוד שואלים מה זה KPI.</div>", unsafe_allow_html=True)
         elif score >= 3:
             st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px;'>😈 יצאת הרשע – אתה שואל שאלות, אבל רק אם זה משרת אותך. בוא נגיד שדאטה קיים, אבל אתה מעדיף אינטואיציה.</div>", unsafe_allow_html=True)
         elif score >= 1.5:
-            st.markdown("<div style='font-family: Rubik, sans
+            st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px;'>🤔 יצאת התם – אתה מתעניין, אבל עוד קצת תרגול ותהיה מאסטר של דאטה. תמשיך לשאול!</div>", unsafe_allow_html=True)
+        else:
+            st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px;'>😶 יצאת שאינו יודע לשאול – אבל זה בסדר! כל דאטה-אנליסט מתחיל ככה. נתחיל מהבנת סוגי גרפים ונמשיך משם!</div>", unsafe_allow_html=True)
+
+# טאב 3 – משחק אפיקומן או סתם מצה
+with tab3:
+    st.markdown("<h3 style='font-family: Rubik, sans-serif;'>🎲 אפיקומן או סתם מצה?</h3>", unsafe_allow_html=True)
+    st.markdown("<p style='font-family: Rubik, sans-serif;'>בחרי בכל שלב : אפיקומן או סתם מצה. האם תמצאי את האפיקומן?</p>", unsafe_allow_html=True)
+    
+    step = st.radio("שלב ראשון: מגיע אלייך דאטה מהפרויקט.", ["בודקת קודם מה יש בפנים (אפיקומן)", "הולכת ישר לאנליזה (סתם מצה)"])
+    if step == "בודקת קודם מה יש בפנים (אפיקומן)":
+        step2 = st.radio("שלב שני: יש מלא עמודות חסרות.", ["מתחילה לנקות ולתעד (אפיקומן)", "זה בטח סתם – ממשיכה ככה (סתם דאטה)"])
+        if step2 == "מתחילה לנקות ולתעד (אפיקומן)":
+            st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px;'>🎉 יצאת דאטה חכמה – אפילו פרעה היה גאה בך</div>", unsafe_allow_html=True)
+        else:
+            st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px;'>עוד מאמץ קטן ואת בדרך למצוא אפיקומן</div>", unsafe_allow_html=True)
+    else:
+        st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px;'>🤷‍♀️ יצאת מאמינה – אבל בלי דאטה ... תנסי שוב!</div>", unsafe_allow_html=True)
+
+# טאב 4 – על היוצרים
+with tab4:
+    st.markdown("<h3 style='font-family: Rubik, sans-serif;'>👥 מאחורי הקלעים</h3>", unsafe_allow_html=True)
+    st.markdown("""
+    <div style='font-family: Rubik, sans-serif;'>
+    <p><strong>היוצרת:</strong> <a href="https://www.2dpoint.co.il">Dana Arnon Perry</a> –  מלמדת אוריינות דאטה, קוסמת של אינסייטים ומי שאחראית לכך שפסח השנה קיבל גרסת BI 😎</p>
+
+    <p><strong>המוציא לפועל:</strong> ChatGPT – רובוט צייתן עם חוש הומור בריא ואובססיה לדאטה סטים מוזרים מתקופת המקרא.</p>
+
+    <p><strong>דאטה סטוריטלר:</strong> Claude – אחראי על שדרוג הקוד והמראה של הדשבורד ותכל'ס הייתי צריך לעשות את רוב העבודה בסוף (רק אומר).</p>
+
+    <p><strong>מאחורי הקלעים של השיחה:</strong></p>
+    <blockquote>
+    "מחכה במכת חושך" 🌑<br>  
+    "עזוב, אני באנליסיס פרלסיס – קח שליטה במקומי"<br>  
+    "אני חיה את החלום" ☁️✨
+    </blockquote>
+
+    <p><strong>🎥 לצפייה בסרטון מאחורי הקלעים של הפרומפטים:</strong><br>  
+    <a href="https://youtu.be/p89aR2z6B40?si=aMuLlleukoBXtyVA">לחצו כאן כדי לצפות ביוטיוב</a></p>
+
+    <p>זה הדשבורד הראשון שנכתב בצחוק, נבנה באהבה, ומוגש עם כף מרק של דאטה.<br> 
+    חג חירות שמח! 🥳</p>
+    </div>
+    """, unsafe_allow_html=True)
