@@ -172,8 +172,7 @@ with tab0:
     st.markdown("""
     <div class="logo-container">
         <!-- מקום ללוגו מגיטהאב -->
-        <img src="https://raw.githubusercontent.com/yourusername/yourrepo/main/logo.png" alt="לוגו" style="max-width:300px;">
-    </div>
+<img src="https://raw.githubusercontent.com/DanaArnonPerry/passover_dashboard/main/Logo.png" alt="לוגו" style="max-width:300px;">    </div>
     """, unsafe_allow_html=True)
     
     # הסבר על הדשבורד
