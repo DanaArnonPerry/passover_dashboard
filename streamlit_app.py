@@ -66,14 +66,28 @@ st.markdown("""
             max-width: 80px !important;
         }
         
-        /* הקטנת השוליים */
-        .js-plotly-plot .plotly .main-svg {
+        /* הגדלת אזור הגרף על ידי הקטנת אזורי שוליים */
+        .main-svg {
+            margin: 0 !important; 
+        }
+        
+        /* הגדלת אזור הגרף ביחס לאזור הצירים */
+        .plot-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .svg-container {
             margin: 0 !important;
+            padding: 0 !important;
         }
         
         /* התאמת גובה הגרף */
         .stPlotlyChart {
-            height: 400px !important;
+            height: 450px !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
     }
     </style>
@@ -141,9 +155,28 @@ with tab1:
     chart_data = pd.DataFrame({"אירוע": events, "מדד חירות": freedom_level, "הערה": funny_notes})
     st.subheader("מדד החירות לאורך יציאת מצרים")
     
+    # שימוש בשמות מקוצרים לתוויות X במובייל
+    shortened_events = {
+        "שעבוד במצרים": "שעבוד",
+        "הולדת משה": "משה", 
+        "הסנה הבוער": "הסנה",
+        "תחילת המכות": "המכות", 
+        "יציאה ממצרים": "יציאה",
+        "קריעת ים סוף": "קריעה"
+    }
+    
+    # יצירת עותק של המידע לגרף
+    mobile_chart_data = chart_data.copy()
+    
+    # החלפת השמות בעותק
+    mobile_chart_data["אירוע"] = mobile_chart_data["אירוע"].map(lambda x: shortened_events.get(x, x))
+    
+    # בחירת נתונים בהתאם לסוג המכשיר (בינתיים נשתמש ברגיל)
+    display_data = chart_data
+
     # יצירת גרף בסיסי עם כותרת ריקה
     fig = px.line(
-        chart_data, 
+        display_data, 
         x="אירוע", 
         y="מדד חירות", 
         markers=True, 
@@ -191,20 +224,22 @@ with tab1:
             tickfont=dict(size=14, color="#333333", family="Arial"),
             gridcolor='rgba(200,200,200,0.2)',
             zeroline=False,
-            # סיבוב תוויות במובייל
-            tickangle=-45
+            tickangle=-45,  # סיבוב תוויות
+            domain=[0.02, 0.98],  # הגדלת אזור הגרף בצדדים
+            fixedrange=True  # מניעת הזזה בציר X
         ),
         yaxis=dict(
             title="מדד החירות הדיגיטלי",
             title_font=dict(size=16, color="#1E4B7A"),
             tickfont=dict(size=14, color="#333333", family="Arial"),
             gridcolor='rgba(200,200,200,0.5)',
-            zeroline=False
+            zeroline=False,
+            domain=[0.02, 0.98]  # הגדלת אזור הגרף למעלה ולמטה
         ),
-        margin=dict(l=20, r=20, t=40, b=80),
-        hovermode="x unified",
+        margin=dict(l=10, r=10, t=30, b=50),  # שוליים מינימליים במובייל
+        hovermode="closest",
         legend_title_font_color="#1E4B7A",
-        height=500,  # גובה קבוע לשיפור תצוגה במובייל
+        height=550,  # גובה קבוע לשיפור תצוגה במובייל
         autosize=True,  # התאמה אוטומטית לגודל המסך
         dragmode='pan'  # שינוי ברירת מחדל לפאן במקום זום
     )
@@ -242,7 +277,9 @@ with tab1:
     
     st.plotly_chart(fig, use_container_width=True, config={
         'displayModeBar': False,  # הסתרת סרגל הכלים של plotly במובייל
-        'responsive': True  # הגדרה רספונסיבית
+        'responsive': True,  # הגדרה רספונסיבית
+        'scrollZoom': False,  # ביטול גלילת זום שעלולה לגרום להזזה לא רצויה
+        'staticPlot': False   # לא לחסום את כל האינטראקציות
     })
     
     st.markdown("""
