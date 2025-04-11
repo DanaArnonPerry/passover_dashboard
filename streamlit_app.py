@@ -366,6 +366,7 @@ with tab1:
             title="מדד החירות הדיגיטלי",
             title_font=dict(size=16, color="#8000FF", family="Rubik, sans-serif"),  # גופן רוביק
             tickfont=dict(size=14, color="#333333", family="Rubik, sans-serif"),  # גופן רוביק
+            title_standoff=30,
             gridcolor='rgba(200,200,200,0.5)',
             zeroline=False,
             domain=[0.02, 0.98],  # הגדלת אזור הגרף למעלה ולמטה
