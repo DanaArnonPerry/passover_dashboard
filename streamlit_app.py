@@ -386,7 +386,7 @@ with tab1:
     
     # הסבר נוסף אחרי הגרף
     st.markdown("""
-    <div style="background-color: rgba(240,248,255,0.5); padding: 15px; border-radius: 5px; border-right: 4px solid #8000FF; margin-top: 20px; font-family: 'Rubik', sans-serif;">
+    <div style="background-color: rgba(242,242,242,0.5); padding: 15px; border-radius: 5px; border-right: 4px solid #8000FF; margin-top: 20px; font-family: 'Rubik', sans-serif;">
     <h4 style="color: #8000FF; margin-top: 0; font-family: 'Rubik', sans-serif;">המסע מעבדות לחירות בעולם הדאטה</h4>
     <p style="font-family: 'Rubik', sans-serif;">כפי שניתן לראות בגרף, האנליסט מתחיל את דרכו בעבודה ידנית מפרכת עם אקסלים, ממש כמו עבודת פרך במצרים.
     דרך תהליך אוטומציה הדרגתי, הוא עובר את ים הדיבאגים, עד שמגיע לחירות מלאה עם דשבורדים אוטומטיים ותובנות שמשנות את הארגון.</p>
