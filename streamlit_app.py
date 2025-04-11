@@ -422,5 +422,9 @@ with tab2:
             else:
                 score += 0.5
 
-        if score >= 5:
-            st.markdown("<div style='font-family:
+      if score >= 5:
+            st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px;'>🧠 יצאת החכם – הדאטה אצלך בידיים טובות. אתה יודע לשאול, לבדוק ולבנות דשבורדים בזמן שכולם עוד שואלים מה זה KPI.</div>", unsafe_allow_html=True)
+        elif score >= 3:
+            st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px;'>😈 יצאת הרשע – אתה שואל שאלות, אבל רק אם זה משרת אותך. בוא נגיד שדאטה קיים, אבל אתה מעדיף אינטואיציה.</div>", unsafe_allow_html=True)
+        elif score >= 1.5:
+            st.markdown("<div style='font-family: Rubik, sans
