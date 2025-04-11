@@ -37,6 +37,45 @@ st.markdown("""
     .gtitle, .fig-content text {
         visibility: hidden !important;
     }
+    
+    /* התאמות למסכים קטנים - מובייל */
+    @media (max-width: 768px) {
+        /* התאמות כלליות לדף */
+        .block-container {
+            padding: 1rem 0.5rem !important;
+            max-width: 100% !important;
+        }
+        
+        /* התאמות לגודל הגרף */
+        .js-plotly-plot, .plotly, .plot-container {
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+        }
+        
+        /* התאמת גודל טקסט */
+        .js-plotly-plot .plotly text {
+            font-size: 10px !important;
+        }
+        
+        /* התאמת רוחב התגיות בציר X */
+        .xtick text {
+            text-overflow: ellipsis !important;
+            overflow: hidden !important;
+            max-width: 80px !important;
+        }
+        
+        /* הקטנת השוליים */
+        .js-plotly-plot .plotly .main-svg {
+            margin: 0 !important;
+        }
+        
+        /* התאמת גובה הגרף */
+        .stPlotlyChart {
+            height: 400px !important;
+        }
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -118,14 +157,17 @@ with tab1:
         text=None  # מוודאים שאין טקסט על הקו
     )
     
-    # הוספת annotations מותאמות אישית לכל נקודה
+    # הוספת annotations מותאמות אישית לכל נקודה - עם התאמה למובייל
     for i, row in chart_data.iterrows():
+        # ביצוע טקסט קצר יותר למובייל
+        short_text = row["הערה"].split('.')[0] + '.' if '.' in row["הערה"] else row["הערה"]
+        
         fig.add_annotation(
             x=row["אירוע"],
             y=row["מדד חירות"],
-            text=row["הערה"],
+            text=short_text,
             showarrow=False,
-            yshift=15,  # התאמת המיקום מעל הנקודה
+            yshift=15,
             font=dict(family="Arial", size=13, color="#333333"),
             bgcolor="rgba(255, 255, 255, 0.8)",
             bordercolor="#DDDDDD",
@@ -148,7 +190,9 @@ with tab1:
             title_font=dict(size=16, color="#1E4B7A"),
             tickfont=dict(size=14, color="#333333", family="Arial"),
             gridcolor='rgba(200,200,200,0.2)',
-            zeroline=False
+            zeroline=False,
+            # סיבוב תוויות במובייל
+            tickangle=-45
         ),
         yaxis=dict(
             title="מדד החירות הדיגיטלי",
@@ -159,7 +203,10 @@ with tab1:
         ),
         margin=dict(l=20, r=20, t=40, b=80),
         hovermode="x unified",
-        legend_title_font_color="#1E4B7A"
+        legend_title_font_color="#1E4B7A",
+        height=500,  # גובה קבוע לשיפור תצוגה במובייל
+        autosize=True,  # התאמה אוטומטית לגודל המסך
+        dragmode='pan'  # שינוי ברירת מחדל לפאן במקום זום
     )
     
     # הוספת אזורים מוצללים לפי רמות החירות
@@ -193,7 +240,10 @@ with tab1:
         annotation_font=dict(size=12, color="darkgreen")
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, config={
+        'displayModeBar': False,  # הסתרת סרגל הכלים של plotly במובייל
+        'responsive': True  # הגדרה רספונסיבית
+    })
     
     st.markdown("""
     <div style="background-color: rgba(240,248,255,0.5); padding: 10px; border-radius: 5px; border-left: 4px solid #1E4B7A; margin-top: 20px;">
@@ -268,8 +318,6 @@ with tab4:
     **היוצרת:** [Dana Arnon Perry](https://www.2dpoint.co.il) –  מלמדת אוריינות דאטה, קוסמת של אינסייטים ומי שאחראית לכך שפסח השנה קיבל גרסת BI 😎
 
     **המוציא לפועל:** ChatGPT – רובוט צייתן עם חוש הומור בריא ואובססיה לדאטה סטים מוזרים מתקופת המקרא.
-    
-    **דאטה סטוריטלר** Claude – אחראי על שדרוג הקוד ועיצוב הגרף.
 
     **מאחורי הקלעים של השיחה:**
     > "מחכה במכת חושך" 🌑  
