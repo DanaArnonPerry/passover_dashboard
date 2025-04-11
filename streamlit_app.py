@@ -454,7 +454,7 @@ with tab4:
     st.markdown("<h3 style='font-family: Rubik, sans-serif;'>👥 מאחורי הקלעים</h3>", unsafe_allow_html=True)
     st.markdown("""
     <div style='font-family: Rubik, sans-serif;'>
-    <p><strong>היוצרת:</strong> <a href="https://www.2dpoint.co.il">Dana Arnon Perry</a> –  מלמדת אוריינות דאטה, קוסמת של אינסייטים ומי שאחראית לכך שפסח השנה קיבל גרסת BI 😎</p>
+    <p><strong>היוצרת:</strong> <a href="https://www.2dpoint.co.il">Dana Arnon Perry</a> –  מלמדת אוריינות נתונים, קוסמת של אינסייטים ומי שאחראית לכך שפסח השנה קיבל גרסת BI 😎</p>
 
     <p><strong>המוציא לפועל:</strong> ChatGPT – רובוט צייתן עם חוש הומור בריא ואובססיה לדאטה סטים מוזרים מתקופת המקרא.</p>
 
