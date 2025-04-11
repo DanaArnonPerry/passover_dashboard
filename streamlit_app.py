@@ -2,8 +2,9 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+st.set_page_config(page_title="מדד החירות בפסח", layout="wide")  
+
 # הגדרות עיצוב כלליות
-st.set_page_config(page_title="מדד החירות בפסח", layout="wide")
 st.markdown("""
     <style>
     body, .stApp {
@@ -51,9 +52,9 @@ with tab1:
             "2. מקבלים קובץ EXCEL עם Missing Values – חושך מצרים",
             "3. הסנה הבוער = פייתון נכנסת לתמונה",
             "4. כל מכה = פילטור חדש (Outliers, Cleaning, Feature Eng)",
-            "5. שולחים לדשבורד – פרעה רוצה גרסה ב־ PowerPoint"
-            "6. קריעת ים סוף = MVP באוויר (Streamlit כמובן!)"
-            "7. מוסיפה LLM לפרומפטים – AI מתחיל להסביר את הגרפים 😮"
+            "5. שולחים לדשבורד – פרעה רוצה גרסה ב־ PowerPoint",
+            "6. קריעת ים סוף = MVP באוויר (Streamlit כמובן!)",
+            "7. מוסיפה LLM לפרומפטים – AI מתחיל להסביר את הגרפים 😮",
             "8. הצגה מול ההנהלה: גרף אחד משנה גורל – יצאת לחופשי!"
 
  
