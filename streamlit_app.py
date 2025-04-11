@@ -326,7 +326,7 @@ with tab1:
             gridcolor='rgba(200,200,200,0.2)',
             zeroline=False,
             tickangle=-45,
-            tickfont=dict(size=12, color="#333333", family="Rubik, sans-serif"),  # גופן רוביק
+            tickfont=dict(size=8, color="#333333", family="Rubik, sans-serif"),  # גופן רוביק
             domain=[0.02, 0.98],  # הגדלת אזור הגרף בצדדים
             fixedrange=True  # מניעת הזזה בציר X
         ),
