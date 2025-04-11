@@ -186,7 +186,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # טאבים לדשבורד
-tab0, tab1, tab2, tab3, tab4 = st.tabs(["🏠 ברוכים הבאים", "📈 מדד החירות", "🧪 איזה בן דאטה אתה?", "🎲 אפיקומן או סתם מצה", "👥 על היוצרים"])
+tab0, tab1, tab2, tab3, tab4 = st.tabs([" ברוכים הבאים", "📈 מדד החירות", " איזה בן דאטה אתה?", " אפיקומן או סתם מצה", "👥 על היוצרים"])
 
 # טאב 0 - פתיח וברכה
 with tab0:
