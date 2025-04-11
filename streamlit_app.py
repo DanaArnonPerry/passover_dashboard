@@ -268,7 +268,7 @@ with tab1:
         x=events,
         y=freedom_level,
         mode='lines+markers',
-        line=dict(width=4, color='#000000', dash='solid'),
+        line=dict(width=4, color='#000000', dash='solid', shape='spline',smoothing=1.3),
         marker=dict(size=12, symbol='circle', line=dict(width=2, color='#000000'))
     ))
     
