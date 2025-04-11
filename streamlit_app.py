@@ -2,10 +2,18 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import base64
+from PIL import Image
+import io
 
 st.set_page_config(page_title="מדד החירות בפסח", layout="wide")  
 
-# הגדרות עיצוב כלליות וטיפול ב-undefined - גרסה אגרסיבית יותר
+# פונקציה להמרת תמונה לbase64 לשימוש ב-HTML
+def get_image_as_base64(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
+
+# הגדרות עיצוב כלליות וטיפול ב-undefined
 st.markdown("""
     <style>
     body, .stApp {
@@ -14,18 +22,75 @@ st.markdown("""
         font-family: 'Arial', sans-serif;
     }
     .main .block-container {
-        padding-top: 2rem;
+        padding-top: 1rem;
     }
     h1, h2, h3 {
         color: #1E4B7A;
     }
     
+    /* עיצוב לכרטיסיית הפתיח */
+    .welcome-card {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        border-right: 5px solid #1E4B7A;
+        margin-bottom: 20px;
+    }
+    
+    .welcome-title {
+        color: #1E4B7A;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+    
+    .welcome-subtitle {
+        color: #555;
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+    
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    
+    .feature-card {
+        background-color: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 15px;
+    }
+    
+    .nav-pills {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    
+    .nav-pill {
+        background-color: #f1f1f1;
+        color: #333;
+        padding: 8px 16px;
+        border-radius: 20px;
+        margin: 0 5px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    
+    .nav-pill.active {
+        background-color: #1E4B7A;
+        color: white;
+    }
+    
     /* גישה אגרסיבית להסתרת undefined */
-    .js-plotly-plot .plotly .g-gtitle,  /* הסתרת אזור כותרת של plotly */
-    .js-plotly-plot text[data-unformatted="undefined"],  /* הסתרת טקסט undefined בגרף */
-    text[data-unformatted="undefined"],  /* הסתרת טקסט undefined בכללי */
-    div:empty,  /* הסתרת אלמנטים ריקים */
-    div:only-child:contains('undefined') {  /* הסתרת אלמנטים שמכילים רק undefined */
+    .js-plotly-plot .plotly .g-gtitle,
+    .js-plotly-plot text[data-unformatted="undefined"],
+    text[data-unformatted="undefined"],
+    div:empty,
+    div:only-child:contains('undefined') {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
@@ -33,61 +98,30 @@ st.markdown("""
         fill: rgba(0,0,0,0) !important;
     }
     
-    /* ניסיון להסתיר את undefined ספציפית בפינה השמאלית העליונה */
     .gtitle, .fig-content text {
         visibility: hidden !important;
     }
     
-    /* התאמות למסכים קטנים - מובייל */
+    /* התאמות למסכים קטנים */
     @media (max-width: 768px) {
-        /* התאמות כלליות לדף */
         .block-container {
             padding: 1rem 0.5rem !important;
             max-width: 100% !important;
         }
         
-        /* התאמות לגודל הגרף */
         .js-plotly-plot, .plotly, .plot-container {
             width: 100% !important;
             min-width: 100% !important;
-            max-width: 100% !important;
             height: auto !important;
         }
         
-        /* התאמת גודל טקסט */
         .js-plotly-plot .plotly text {
             font-size: 10px !important;
         }
         
-        /* התאמת רוחב התגיות בציר X */
         .xtick text {
             text-overflow: ellipsis !important;
-            overflow: hidden !important;
             max-width: 80px !important;
-        }
-        
-        /* הגדלת אזור הגרף על ידי הקטנת אזורי שוליים */
-        .main-svg {
-            margin: 0 !important; 
-        }
-        
-        /* הגדלת אזור הגרף ביחס לאזור הצירים */
-        .plot-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .svg-container {
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-        
-        /* התאמת גובה הגרף */
-        .stPlotlyChart {
-            height: 450px !important;
-            margin: 0 !important;
-            padding: 0 !important;
         }
     }
     </style>
@@ -96,64 +130,119 @@ st.markdown("""
 # תכלית הקוד - להסתיר undefined בגרף 
 st.markdown("""
     <script>
-    // נוסיף את הסקריפט פעמיים - פעם מוקדם ופעם מאוחר
     const hideUndefined = function() {
-        // חיפוש כל הטקסטים שהם 'undefined'
         const allElements = document.querySelectorAll('*');
         allElements.forEach(function(element) {
-            // בדיקה אם זה אלמנט טקסט שמכיל 'undefined'
             if (element.textContent === 'undefined') {
                 element.style.display = 'none';
                 element.style.visibility = 'hidden';
-                element.style.color = 'white';
             }
             
-            // בדיקה אם זה אלמנט SVG עם 'undefined'
             if (element.tagName === 'text' && element.textContent === 'undefined') {
                 element.style.display = 'none';
-                element.setAttribute('fill', 'rgba(0,0,0,0)');
                 element.setAttribute('visibility', 'hidden');
             }
         });
     };
     
-    // הפעלה בכמה שלבים לתפוס את האלמנט גם אחרי טעינה מלאה של הדף
-    setTimeout(hideUndefined, 200);
     setTimeout(hideUndefined, 500);
     setTimeout(hideUndefined, 1000);
     setTimeout(hideUndefined, 2000);
-    
-    // נסיון נוסף - מניעת כל תצוגת כותרת בגרף
-    setTimeout(function() {
-        const plotTitles = document.querySelectorAll('.gtitle, .fig-content text');
-        plotTitles.forEach(function(title) {
-            title.style.visibility = 'hidden';
-        });
-    }, 1000);
     </script>
     """, unsafe_allow_html=True)
 
 # טאבים לדשבורד
-tab1, tab2, tab3, tab4 = st.tabs(["📈 מדד החירות", "🧪 איזה בן דאטה אתה?", "🎲 אפיקומן או סתם מצה", "👥 על היוצרים"])
+tab0, tab1, tab2, tab3, tab4 = st.tabs(["🏠 ברוכים הבאים", "📈 מדד החירות", "🧪 איזה בן דאטה אתה?", "🎲 אפיקומן או סתם מצה", "👥 על היוצרים"])
+
+# טאב 0 - פתיח וברכה
+with tab0:
+    st.markdown("""
+    <div class="welcome-card">
+        <h1 class="welcome-title">ברוכים הבאים לדשבורד מדד החירות בפסח!</h1>
+        <p class="welcome-subtitle">מעבדות הנתונים לחירות הדאטה - חוגגים את יציאת מצרים בגרסת הדאטה סיינס</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # אם יש לך לוגו, אפשר להציג אותו כאן
+    # לדוגמה:
+    # logo_path = "path_to_logo.png"
+    # st.image(logo_path, width=300)
+    
+    # או להשאיר מקום ללוגו שיטען מגיטהאב:
+    st.markdown("""
+    <div class="logo-container">
+        <!-- מקום ללוגו מגיטהאב -->
+        <img src="https://raw.githubusercontent.com/yourusername/yourrepo/main/logo.png" alt="לוגו" style="max-width:300px;">
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # הסבר על הדשבורד
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("""
+        <div class="feature-card">
+            <h3>מה יש בדשבורד?</h3>
+            <ul>
+                <li><b>מדד החירות</b> - עקבו אחר התפתחות החירות הדיגיטלית לאורך תהליך עבודה עם נתונים</li>
+                <li><b>איזה בן דאטה אתה?</b> - גלו איזה טיפוס אנליטי אתם בעזרת שאלון קצר</li>
+                <li><b>אפיקומן או סתם מצה?</b> - משחק קצר שיסייע לכם לגלות את האפיקומן בדאטה</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="feature-card">
+            <h3>חג חירות שמח! 🎉</h3>
+            <p>הדשבורד הזה נוצר בהשראת חג הפסח, לחגוג את הדרך מעבדות הנתונים אל חירות הדאטה והתובנות.</p>
+            <p>כמו בסיפור יציאת מצרים, גם בעולם הנתונים אנחנו עוברים מסע - מעבודה ידנית מייגעת ועד לאוטומציה ותובנות שמשנות את הארגון.</p>
+            <p><i>מאחלים לכם פסח כשר ושמח, ועבודת דאטה נקייה מחמץ! 🌟</i></p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # טיפים לשימוש
+    st.markdown("""
+    <div class="feature-card">
+        <h3>טיפים לשימוש בדשבורד</h3>
+        <p>לחצו על הלשוניות למעלה כדי לנווט בין חלקי הדשבורד השונים:</p>
+        <div class="nav-pills">
+            <span class="nav-pill active">🏠 ברוכים הבאים</span>
+            <span class="nav-pill">📈 מדד החירות</span>
+            <span class="nav-pill">🧪 איזה בן דאטה אתה?</span>
+            <span class="nav-pill">🎲 אפיקומן או סתם מצה</span>
+            <span class="nav-pill">👥 על היוצרים</span>
+        </div>
+        <p>בגרף מדד החירות תוכלו לראות את שלבי המעבר מעבדות לחירות דיגיטלית, כשכל שלב מייצג נקודת מפנה בעבודה עם נתונים.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # טאב 1 – גרף מדד החירות
 with tab1:
+    # הסבר קצר לפני הגרף
+    st.markdown("""
+    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+    <h3 style="margin-top: 0;">מדד החירות לאורך יציאת מצרים - המסע מעבדות לחירות דיגיטלית</h3>
+    <p>הגרף הבא מציג את רמת החירות הדיגיטלית בכל שלב של עבודה עם נתונים, בהשוואה לשלבי יציאת מצרים המסורתית. 
+    ככל שעולים בסולם, כך גדלה החירות מעבודה ידנית מייגעת לעבר אוטומציה משחררת.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
     events = [
         "שעבוד במצרים", "הולדת משה", "הסנה הבוער", "תחילת המכות",
         "יציאה ממצרים", "קריעת ים סוף"
     ]
+    
     freedom_level = [1, 2, 3, 1, 6, 10]
+    
     funny_notes = [
         "מנקים אקסלים ידנית. אין סוף לעבדות.",
         "שומעים על פייתון. יש תקווה.",
         "קוד ראשון רץ בהצלחה. הנס מתגלה.",
         "מריצים סקריפטים. דיבאגים אינסופיים.",
-        "בינה מלאכותית מנקה הכל. בשניות.",  # שינוי מ-AI לבינה מלאכותית
+        "בינה מלאכותית מנקה הכל. בשניות.",
         "מציגים להנהלה דשבורד מהחלומות."
     ]
-
-    chart_data = pd.DataFrame({"אירוע": events, "מדד חירות": freedom_level, "הערה": funny_notes})
-    st.subheader("מדד החירות לאורך יציאת מצרים")
     
     # שימוש בשמות מקוצרים לתוויות X במובייל
     shortened_events = {
@@ -165,86 +254,26 @@ with tab1:
         "קריעת ים סוף": "קריעה"
     }
     
-    # יצירת עותק של המידע לגרף
-    mobile_chart_data = chart_data.copy()
+    # יצירת DataFrame
+    chart_data = pd.DataFrame({"אירוע": events, "מדד חירות": freedom_level, "הערה": funny_notes})
     
-    # החלפת השמות בעותק
+    # יצירת עותק עם שמות מקוצרים למובייל
+    mobile_chart_data = chart_data.copy()
     mobile_chart_data["אירוע"] = mobile_chart_data["אירוע"].map(lambda x: shortened_events.get(x, x))
     
-    # בחירת נתונים בהתאם לסוג המכשיר (בינתיים נשתמש ברגיל)
-    display_data = chart_data
-
-    # יצירת גרף בסיסי עם כותרת ריקה
-    fig = px.line(
-        display_data, 
-        x="אירוע", 
-        y="מדד חירות", 
-        markers=True, 
-        title=" "  # כותרת עם רווח אחד במקום undefined
-    )
+    # יצירת גרף קבוע (לא רספונסיבי) לטלפון נייד
+    fig = go.Figure()
     
-    # עיצוב קו הגרף והסמנים
-    fig.update_traces(
+    # הוספת הקו והנקודות
+    fig.add_trace(go.Scatter(
+        x=events,
+        y=freedom_level,
+        mode='lines+markers',
         line=dict(width=4, color='#1f77b4', dash='solid'),
-        marker=dict(size=12, symbol='circle', line=dict(width=2, color='darkblue')),
-        text=None  # מוודאים שאין טקסט על הקו
-    )
+        marker=dict(size=12, symbol='circle', line=dict(width=2, color='darkblue'))
+    ))
     
-    # הוספת annotations מותאמות אישית לכל נקודה - עם התאמה למובייל
-    for i, row in chart_data.iterrows():
-        # ביצוע טקסט קצר יותר למובייל
-        short_text = row["הערה"].split('.')[0] + '.' if '.' in row["הערה"] else row["הערה"]
-        
-        fig.add_annotation(
-            x=row["אירוע"],
-            y=row["מדד חירות"],
-            text=short_text,
-            showarrow=False,
-            yshift=15,
-            font=dict(family="Arial", size=13, color="#333333"),
-            bgcolor="rgba(255, 255, 255, 0.8)",
-            bordercolor="#DDDDDD",
-            borderwidth=1,
-            borderpad=4,
-            align="center"
-        )
-    
-    # עיצוב כללי של הגרף
-    fig.update_layout(
-        yaxis_range=[0, 11],
-        font=dict(family="Arial", size=14, color="#505050"),
-        title=None,  # מסירים כותרת
-        showlegend=False,  # ביטול הצגת מקרא (legend)
-        title_font=dict(size=24, family="Arial", color="darkblue"),
-        plot_bgcolor='rgba(240,248,255,0.3)',  # רקע תכלת בהיר מאוד
-        paper_bgcolor='white',
-        xaxis=dict(
-            title="שלבי יציאת מצרים",
-            title_font=dict(size=16, color="#1E4B7A"),
-            tickfont=dict(size=14, color="#333333", family="Arial"),
-            gridcolor='rgba(200,200,200,0.2)',
-            zeroline=False,
-            tickangle=-45,  # סיבוב תוויות
-            domain=[0.02, 0.98],  # הגדלת אזור הגרף בצדדים
-            fixedrange=True  # מניעת הזזה בציר X
-        ),
-        yaxis=dict(
-            title="מדד החירות הדיגיטלי",
-            title_font=dict(size=16, color="#1E4B7A"),
-            tickfont=dict(size=14, color="#333333", family="Arial"),
-            gridcolor='rgba(200,200,200,0.5)',
-            zeroline=False,
-            domain=[0.02, 0.98]  # הגדלת אזור הגרף למעלה ולמטה
-        ),
-        margin=dict(l=10, r=10, t=30, b=50),  # שוליים מינימליים במובייל
-        hovermode="closest",
-        legend_title_font_color="#1E4B7A",
-        height=550,  # גובה קבוע לשיפור תצוגה במובייל
-        autosize=True,  # התאמה אוטומטית לגודל המסך
-        dragmode='pan'  # שינוי ברירת מחדל לפאן במקום זום
-    )
-    
-    # הוספת אזורים מוצללים לפי רמות החירות
+    # הוספת אזורים מוצללים לרמות חירות
     fig.add_hrect(
         y0=0, y1=3, 
         fillcolor="rgba(255,0,0,0.07)", 
@@ -275,17 +304,66 @@ with tab1:
         annotation_font=dict(size=12, color="darkgreen")
     )
     
-    st.plotly_chart(fig, use_container_width=True, config={
-        'displayModeBar': False,  # הסתרת סרגל הכלים של plotly במובייל
-        'responsive': True,  # הגדרה רספונסיבית
-        'scrollZoom': False,  # ביטול גלילת זום שעלולה לגרום להזזה לא רצויה
-        'staticPlot': False   # לא לחסום את כל האינטראקציות
+    # הוספת annotations מותאמות אישית לכל נקודה
+    for i, row in chart_data.iterrows():
+        # ביצוע טקסט קצר יותר למובייל
+        short_text = row["הערה"].split('.')[0] + '.' if '.' in row["הערה"] else row["הערה"]
+        
+        fig.add_annotation(
+            x=row["אירוע"],
+            y=row["מדד חירות"],
+            text=short_text,
+            showarrow=False,
+            yshift=15,
+            font=dict(family="Arial", size=13, color="#333333"),
+            bgcolor="rgba(255, 255, 255, 0.8)",
+            bordercolor="#DDDDDD",
+            borderwidth=1,
+            borderpad=4,
+            align="center"
+        )
+    
+    # עיצוב כללי של הגרף
+    fig.update_layout(
+        title=None,
+        showlegend=False,
+        plot_bgcolor='rgba(240,248,255,0.3)',
+        paper_bgcolor='white',
+        xaxis=dict(
+            title="שלבי יציאת מצרים",
+            title_font=dict(size=16, color="#1E4B7A"),
+            tickfont=dict(size=14, color="#333333", family="Arial"),
+            gridcolor='rgba(200,200,200,0.2)',
+            zeroline=False,
+            tickangle=-45,
+        ),
+        yaxis=dict(
+            title="מדד החירות הדיגיטלי",
+            title_font=dict(size=16, color="#1E4B7A"),
+            tickfont=dict(size=14, color="#333333", family="Arial"),
+            gridcolor='rgba(200,200,200,0.5)',
+            zeroline=False,
+            range=[0, 11]
+        ),
+        margin=dict(l=10, r=10, t=30, b=50),
+        height=550,  # גובה קבוע במקום רספונסיבי
+        width=800,   # רוחב קבוע במקום רספונסיבי
+        autosize=False,  # ביטול הגודל האוטומטי
+    )
+    
+    # הצגת הגרף עם הגדרות לא רספונסיביות
+    st.plotly_chart(fig, config={
+        'displayModeBar': False,
+        'responsive': False,  # ביטול רספונסיביות
+        'staticPlot': True   # הפיכה לתמונה סטטית לחלוטין
     })
     
+    # הסבר נוסף אחרי הגרף
     st.markdown("""
-    <div style="background-color: rgba(240,248,255,0.5); padding: 10px; border-radius: 5px; border-left: 4px solid #1E4B7A; margin-top: 20px;">
-    <h4 style="color: #1E4B7A;">מסע הדאטה לחירות</h4>
-    <p>הגרף מציג את התפתחות רמת החירות הדיגיטלית בתהליך עבודה עם דאטה, מקביל לשלבי יציאת מצרים.</p>
+    <div style="background-color: rgba(240,248,255,0.5); padding: 15px; border-radius: 5px; border-right: 4px solid #1E4B7A; margin-top: 20px;">
+    <h4 style="color: #1E4B7A; margin-top: 0;">המסע מעבדות לחירות בעולם הדאטה</h4>
+    <p>כפי שניתן לראות בגרף, האנליסט מתחיל את דרכו בעבודה ידנית מפרכת עם אקסלים, ממש כמו עבודת פרך במצרים.
+    דרך תהליך אוטומציה הדרגתי, הוא עובר את ים הדיבאגים, עד שמגיע לחירות מלאה עם דשבורדים אוטומטיים ותובנות שמשנות את הארגון.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -308,7 +386,7 @@ with tab2:
 
     q3 = st.radio("איך אתה מרגיש לגבי דשבורדים?", [
         "אהבה בלב",
-        "נחמד אבל  overrated",
+        "נחמד אבל overrated",
         "עדיין מנסה להבין את הקטע של הסלייסרים",
         "חשבתי שזו בכלל מצגת"])
 
@@ -334,7 +412,7 @@ with tab2:
         else:
             st.error("😶 יצאת שאינו יודע לשאול – אבל זה בסדר! כל דאטה-אנליסט מתחיל ככה. נתחיל מהבנת סוגי גרפים ונמשיך משם!")
 
-# טאב 3 – משחק אפיקומן או סתם מצה (מוקאפ)
+# טאב 3 – משחק אפיקומן או סתם מצה
 with tab3:
     st.subheader("🎲 אפיקומן או סתם מצה?")
     st.markdown("בחרי בכל שלב : אפיקומן או סתם מצה. האם תמצאי את האפיקומן?")
