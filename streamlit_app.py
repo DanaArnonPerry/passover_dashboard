@@ -354,7 +354,7 @@ with tab1:
     st.plotly_chart(fig, config={
         'displayModeBar': False,
         'responsive': True,  # ביטול רספונסיביות
-        'staticPlot': True   # הפיכה לתמונה סטטית לחלוטין
+        'staticPlot': False   # הפיכה לתמונה סטטית לחלוטין
     })
     
     # הסבר נוסף אחרי הגרף
