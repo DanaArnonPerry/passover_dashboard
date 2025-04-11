@@ -313,7 +313,7 @@ with tab1:
             y=row["מדד חירות"],
             text=short_text,
             showarrow=False,
-            yshift=40,
+            yshift=50,
             font=dict(family="Arial", size=13, color="#333333",weight="bold"),           
             borderpad=4,
             align="center"
