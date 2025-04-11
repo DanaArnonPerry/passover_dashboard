@@ -13,7 +13,7 @@ st.markdown("""
         font-family: 'Arial', sans-serif;
     }
     </style>
-""", unsafe_allow_html=true)
+""", unsafe_allow_html=True)
 
 # טאבים לדשבורד
 tab1, tab2, tab3, tab4 = st.tabs(["📈 מדד החירות", "🧪 איזה בן דאטה אתה?", "🎲 מצה או דאטה", "👥 על היוצרים"])
@@ -45,7 +45,7 @@ with tab1:
         font=dict(family="Arial", size=14),
     
     )
-    st.plotly_chart(fig, use_container_width=true)
+    st.plotly_chart(fig, use_container_width=True)
     with st.expander("📜 טיימליין - מ-Row Data למצגת מצות"):
         timeline = [
             "1. שולחים CSV ממצרים – בלי שמות עמודות",
