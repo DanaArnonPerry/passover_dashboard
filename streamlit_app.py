@@ -413,7 +413,7 @@ with tab2:
 
 # טאב 3 – משחק אפיקומן או סתם מצה
 with tab3:
-    st.markdown("<h3 style='font-family: Rubik, sans-serif;'>🎲 אפיקומן או סתם מצה?</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='font-family: Rubik, sans-serif;'> אפיקומן או סתם מצה?</h3>", unsafe_allow_html=True)
     st.markdown("<p style='font-family: Rubik, sans-serif;'>בחרי בכל שלב : אפיקומן או סתם מצה. האם תמצאי את האפיקומן?</p>", unsafe_allow_html=True)
     
     step = st.radio("שלב ראשון: מגיע אלייך דאטה מהפרויקט.", ["בודקת קודם מה יש בפנים (אפיקומן)", "הולכת ישר לאנליזה (סתם מצה)"])
