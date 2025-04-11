@@ -194,9 +194,7 @@ with tab0:
     <div class="welcome-header">
         <div class="welcome-title-container">
             <h1 class="welcome-title">ברוכים הבאים לדשבורד מדד החירות !</h1>
-            <p class="welcome-subtitle">מעבדות הנתונים לחירות הדאטה - חוגגים את יציאת מצרים בגרסת הדאטה סיינס</p>
-            <p>לחצו על הלשוניות למעלה כדי לנווט בין חלקי הדשבורד השונים.</p>
-
+            <p class="welcome-subtitle">מעבדות הנתונים לחירות הדאטה - חוגגים את יציאת מצרים בגרסת הדאטה סיינס</h3>
         </div>
         <div class="logo-right">
             <img src="https://raw.githubusercontent.com/DanaArnonPerry/passover_dashboard/main/Logo.png" alt="לוגו" style="max-width:150px;">
