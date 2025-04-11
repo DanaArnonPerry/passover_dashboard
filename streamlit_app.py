@@ -353,7 +353,7 @@ with tab1:
     # הצגת הגרף עם הגדרות לא רספונסיביות
     st.plotly_chart(fig, config={
         'displayModeBar': False,
-        'responsive': False,  # ביטול רספונסיביות
+        'responsive': True,  # ביטול רספונסיביות
         'staticPlot': True   # הפיכה לתמונה סטטית לחלוטין
     })
     
