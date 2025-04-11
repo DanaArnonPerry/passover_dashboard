@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 
 st.set_page_config(page_title="מדד החירות בפסח", layout="wide")  
 
-# הגדרות עיצוב כלליות וטיפול ב-undefined
+# הגדרות עיצוב כלליות וטיפול ב-undefined - גרסה אגרסיבית יותר
 st.markdown("""
     <style>
     body, .stApp {
@@ -19,41 +19,66 @@ st.markdown("""
     h1, h2, h3 {
         color: #1E4B7A;
     }
-    /* הסתרת אלמנטים שמכילים רק את הטקסט 'undefined' */
-    *:empty, *:only-child:contains('undefined') {
+    
+    /* גישה אגרסיבית להסתרת undefined */
+    .js-plotly-plot .plotly .g-gtitle,  /* הסתרת אזור כותרת של plotly */
+    .js-plotly-plot text[data-unformatted="undefined"],  /* הסתרת טקסט undefined בגרף */
+    text[data-unformatted="undefined"],  /* הסתרת טקסט undefined בכללי */
+    div:empty,  /* הסתרת אלמנטים ריקים */
+    div:only-child:contains('undefined') {  /* הסתרת אלמנטים שמכילים רק undefined */
         display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        color: rgba(0,0,0,0) !important;
+        fill: rgba(0,0,0,0) !important;
     }
-    /* צביעת הטקסט 'undefined' בלבן כדי להסתירו */
-    *:contains('undefined') {
-        color: white !important;
+    
+    /* ניסיון להסתיר את undefined ספציפית בפינה השמאלית העליונה */
+    .gtitle, .fig-content text {
+        visibility: hidden !important;
     }
     </style>
-    
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // פונקציה להסרת אלמנטים עם הטקסט 'undefined'
-        const removeUndefined = () => {
-            const walker = document.createTreeWalker(
-                document.body, 
-                NodeFilter.SHOW_TEXT, 
-                null, 
-                false
-            );
-            let node;
-            while (node = walker.nextNode()) {
-                if (node.nodeValue.trim() === 'undefined') {
-                    if (node.parentNode) {
-                        node.parentNode.style.color = 'white';  // צביעה בלבן
-                    }
-                }
-            }
-        }
-        // הפעלה מיידית ושוב אחרי רגע להתמודד עם תוכן דינמי
-        setTimeout(removeUndefined, 100);
-        setTimeout(removeUndefined, 1000);
-    });
-    </script>
 """, unsafe_allow_html=True)
+
+# תכלית הקוד - להסתיר undefined בגרף 
+st.markdown("""
+    <script>
+    // נוסיף את הסקריפט פעמיים - פעם מוקדם ופעם מאוחר
+    const hideUndefined = function() {
+        // חיפוש כל הטקסטים שהם 'undefined'
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(function(element) {
+            // בדיקה אם זה אלמנט טקסט שמכיל 'undefined'
+            if (element.textContent === 'undefined') {
+                element.style.display = 'none';
+                element.style.visibility = 'hidden';
+                element.style.color = 'white';
+            }
+            
+            // בדיקה אם זה אלמנט SVG עם 'undefined'
+            if (element.tagName === 'text' && element.textContent === 'undefined') {
+                element.style.display = 'none';
+                element.setAttribute('fill', 'rgba(0,0,0,0)');
+                element.setAttribute('visibility', 'hidden');
+            }
+        });
+    };
+    
+    // הפעלה בכמה שלבים לתפוס את האלמנט גם אחרי טעינה מלאה של הדף
+    setTimeout(hideUndefined, 200);
+    setTimeout(hideUndefined, 500);
+    setTimeout(hideUndefined, 1000);
+    setTimeout(hideUndefined, 2000);
+    
+    // נסיון נוסף - מניעת כל תצוגת כותרת בגרף
+    setTimeout(function() {
+        const plotTitles = document.querySelectorAll('.gtitle, .fig-content text');
+        plotTitles.forEach(function(title) {
+            title.style.visibility = 'hidden';
+        });
+    }, 1000);
+    </script>
+    """, unsafe_allow_html=True)
 
 # טאבים לדשבורד
 tab1, tab2, tab3, tab4 = st.tabs(["📈 מדד החירות", "🧪 איזה בן דאטה אתה?", "🎲 אפיקומן או סתם מצה", "👥 על היוצרים"])
@@ -77,8 +102,14 @@ with tab1:
     chart_data = pd.DataFrame({"אירוע": events, "מדד חירות": freedom_level, "הערה": funny_notes})
     st.subheader("מדד החירות לאורך יציאת מצרים")
     
-    # יצירת גרף בסיסי - בלי טקסט על הקו עצמו
-    fig = px.line(chart_data, x="אירוע", y="מדד חירות", markers=True)
+    # יצירת גרף בסיסי עם כותרת ריקה
+    fig = px.line(
+        chart_data, 
+        x="אירוע", 
+        y="מדד חירות", 
+        markers=True, 
+        title=" "  # כותרת עם רווח אחד במקום undefined
+    )
     
     # עיצוב קו הגרף והסמנים
     fig.update_traces(
