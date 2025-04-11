@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+st.title("דשבורד פסח – טעינה הצליחה! 🎉")
+
 # הגדרות עיצוב כלליות
 st.set_page_config(page_title="מדד החירות בפסח", layout="wide")
 st.markdown("""
