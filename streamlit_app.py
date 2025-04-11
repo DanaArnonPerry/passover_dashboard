@@ -25,7 +25,7 @@ st.markdown("""
         padding-top: 1rem;
     }
     h1, h2, h3 {
-        color: #1E4B7A;
+        color: #8000FF;
     }
     
     /* עיצוב לכרטיסיית הפתיח */
@@ -33,12 +33,12 @@ st.markdown("""
         background-color: #f8f9fa;
         padding: 20px;
         border-radius: 10px;
-        border-right: 5px solid #1E4B7A;
+        border-right: 5px solid #8000FF;
         margin-bottom: 20px;
     }
     
     .welcome-title {
-        color: #1E4B7A;
+        color: #8000FF;
         font-size: 24px;
         margin-bottom: 10px;
     }
@@ -81,7 +81,7 @@ st.markdown("""
     }
     
     .nav-pill.active {
-        background-color: #1E4B7A;
+        background-color: #8000FF;
         color: white;
     }
     
@@ -332,7 +332,7 @@ with tab1:
         ),
         yaxis=dict(
             title="מדד החירות הדיגיטלי",
-            title_font=dict(size=16, color="#1E4B7A"),
+            title_font=dict(size=16, color="#8000FF"),
             tickfont=dict(size=14, color="#333333", family="Arial"),
             gridcolor='rgba(200,200,200,0.5)',
             zeroline=False,
@@ -353,7 +353,7 @@ with tab1:
     
     # הסבר נוסף אחרי הגרף
     st.markdown("""
-    <div style="background-color: rgba(240,248,255,0.5); padding: 15px; border-radius: 5px; border-right: 4px solid #1E4B7A; margin-top: 20px;">
+    <div style="background-color: rgba(240,248,255,0.5); padding: 15px; border-radius: 5px; border-right: 4px solid #8000FF; margin-top: 20px;">
     <h4 style="color: #1E4B7A; margin-top: 0;">המסע מעבדות לחירות בעולם הדאטה</h4>
     <p>כפי שניתן לראות בגרף, האנליסט מתחיל את דרכו בעבודה ידנית מפרכת עם אקסלים, ממש כמו עבודת פרך במצרים.
     דרך תהליך אוטומציה הדרגתי, הוא עובר את ים הדיבאגים, עד שמגיע לחירות מלאה עם דשבורדים אוטומטיים ותובנות שמשנות את הארגון.</p>
