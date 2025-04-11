@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 
 st.set_page_config(page_title="מדד החירות בפסח", layout="wide")  
 
-# הגדרות עיצוב כלליות
+# הגדרות עיצוב כלליות וטיפול ב-undefined
 st.markdown("""
     <style>
     body, .stApp {
@@ -19,7 +19,36 @@ st.markdown("""
     h1, h2, h3 {
         color: #1E4B7A;
     }
+    /* הסתרת אלמנטים שמכילים רק את הטקסט 'undefined' */
+    *:empty, *:only-child:contains('undefined') {
+        display: none !important;
+    }
     </style>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // פונקציה להסרת אלמנטים עם הטקסט 'undefined'
+        const removeUndefined = () => {
+            const walker = document.createTreeWalker(
+                document.body, 
+                NodeFilter.SHOW_TEXT, 
+                null, 
+                false
+            );
+            let node;
+            while (node = walker.nextNode()) {
+                if (node.nodeValue.trim() === 'undefined') {
+                    if (node.parentNode) {
+                        node.parentNode.style.display = 'none';
+                    }
+                }
+            }
+        }
+        // הפעלה מיידית ושוב אחרי רגע להתמודד עם תוכן דינמי
+        setTimeout(removeUndefined, 100);
+        setTimeout(removeUndefined, 1000);
+    });
+    </script>
 """, unsafe_allow_html=True)
 
 # טאבים לדשבורד
@@ -37,7 +66,7 @@ with tab1:
         "שומעים על פייתון. יש תקווה.",
         "קוד ראשון רץ בהצלחה. הנס מתגלה.",
         "מריצים סקריפטים. דיבאגים אינסופיים.",
-        "‏AI מנקה הכל. בשניות.",  # הוספנו תו RLM לפני AI לתיקון כיוון הטקסט
+        "בינה מלאכותית מנקה הכל. בשניות.",  # שינוי מ-AI לבינה מלאכותית
         "מציגים להנהלה דשבורד מהחלומות."
     ]
 
@@ -74,7 +103,8 @@ with tab1:
     fig.update_layout(
         yaxis_range=[0, 11],
         font=dict(family="Arial", size=14, color="#505050"),
-        title=None,  # מסירים כותרת כדי למנוע את ה-undefined
+        title=None,  # מסירים כותרת
+        showlegend=False,  # ביטול הצגת מקרא (legend)
         title_font=dict(size=24, family="Arial", color="darkblue"),
         plot_bgcolor='rgba(240,248,255,0.3)',  # רקע תכלת בהיר מאוד
         paper_bgcolor='white',
