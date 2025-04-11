@@ -329,9 +329,7 @@ with tab1:
         plot_bgcolor='rgba(240,248,255,0.3)',
         paper_bgcolor='white',
         xaxis=dict(
-            title="שלבי יציאת מצרים",
-            title_font=dict(size=16, color="#1E4B7A"),
-            tickfont=dict(size=14, color="#333333", family="Arial"),
+            ickfont=dict(size=14, color="#333333", family="Arial"),
             gridcolor='rgba(200,200,200,0.2)',
             zeroline=False,
             tickangle=-45,
