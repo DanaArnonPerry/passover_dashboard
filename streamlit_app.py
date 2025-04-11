@@ -23,6 +23,10 @@ st.markdown("""
     *:empty, *:only-child:contains('undefined') {
         display: none !important;
     }
+    /* צביעת הטקסט 'undefined' בלבן כדי להסתירו */
+    *:contains('undefined') {
+        color: white !important;
+    }
     </style>
     
     <script>
@@ -39,7 +43,7 @@ st.markdown("""
             while (node = walker.nextNode()) {
                 if (node.nodeValue.trim() === 'undefined') {
                     if (node.parentNode) {
-                        node.parentNode.style.display = 'none';
+                        node.parentNode.style.color = 'white';  // צביעה בלבן
                     }
                 }
             }
