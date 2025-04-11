@@ -269,7 +269,7 @@ with tab1:
         y=freedom_level,
         mode='lines+markers',
         line=dict(width=4, color='#000000', dash='solid'),
-        marker=dict(size=12, symbol='circle', line=dict(width=2, color='000000'))
+        marker=dict(size=12, symbol='circle', line=dict(width=2, color='#000000'))
     ))
     
     # הוספת אזורים מוצללים לרמות חירות
