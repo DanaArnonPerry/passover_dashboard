@@ -194,7 +194,11 @@ with tab0:
     <div class="welcome-header">
         <div class="welcome-title-container">
             <h1 class="welcome-title">ברוכים הבאים לדשבורד מדד החירות !</h1>
-            <p class="welcome-subtitle">מעבדות הנתונים לחירות הדאטה - חוגגים את יציאת מצרים בגרסת הדאטה סיינס</h3>
+            <p>לחצו על הלשוניות למעלה כדי לנווט בין חלקי הדשבורד השונים.</p>
+            <div class="github-info">
+                <p>הדשבורד נבנה בעזרת בינה מלאכותית (Claude & ChatGPT) 🤖</p>
+                <p><a href="https://github.com/DanaArnonPerry/passover_dashboard" target="_blank">צפייה בקוד המקור ב-GitHub</a> 💻</p>
+            </div>
         </div>
         <div class="logo-right">
             <img src="https://raw.githubusercontent.com/DanaArnonPerry/passover_dashboard/main/Logo.png" alt="לוגו" style="max-width:150px;">
