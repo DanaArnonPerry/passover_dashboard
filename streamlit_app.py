@@ -330,7 +330,7 @@ with tab1:
             zeroline=False,
             tickangle=0,
             tickfont=dict(size=12, color="#333333", family="Rubik, sans-serif",weight="bold"),  # גופן רוביק
-            domain=[0.02, 1],  # הגדלת אזור הגרף בצדדים
+            domain=[0.02, 0.8],  # הגדלת אזור הגרף בצדדים
             fixedrange=True  # מניעת הזזה בציר X
         ),
         yaxis=dict(
