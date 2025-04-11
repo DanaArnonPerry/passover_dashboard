@@ -292,28 +292,7 @@ with tab1:
         ),
         marker=dict(size=12, symbol='circle', line=dict(width=2, color='#000000'))
     ))
-    
-    # הוספת אזורים מוצללים לרמות חירות
-    fig.add_hrect(
-        y0=0, y1=3, 
-        fillcolor="rgba(255,0,0,0.07)", 
-        layer="below", 
-        line_width=0,
-        annotation_text="אזור שעבוד",
-        annotation_position="bottom right",
-        annotation_font=dict(size=12, color="darkred", family="Rubik, sans-serif")
-    )
-    
       
-    fig.add_hrect(
-        y0=7, y1=11, 
-        fillcolor="rgba(0,128,0,0.07)", 
-        layer="below", 
-        line_width=0,
-        annotation_text="אזור חירות",
-        annotation_position="bottom right",
-        annotation_font=dict(size=12, color="darkgreen", family="Rubik, sans-serif")
-    )
     
     # הוספת annotations מותאמות אישית לכל נקודה
     for i, row in chart_data.iterrows():
