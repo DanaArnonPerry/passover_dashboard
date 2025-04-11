@@ -326,16 +326,12 @@ with tab1:
             gridcolor='rgba(200,200,200,0.2)',
             zeroline=False,
             tickangle=-45,
-            title="שלבי יציאת מצרים",  # הוספת כותרת לציר X
-            title_font=dict(size=16, color="#8000FF", family="Rubik, sans-serif"),  # גופן רוביק
-            tickfont=dict(size=14, color="#333333", family="Rubik, sans-serif"),  # גופן רוביק
+            tickfont=dict(size=12, color="#333333", family="Rubik, sans-serif"),  # גופן רוביק
             domain=[0.02, 0.98],  # הגדלת אזור הגרף בצדדים
             fixedrange=True  # מניעת הזזה בציר X
         ),
         yaxis=dict(
-            title="מדד החירות הדיגיטלי",
-            title_font=dict(size=16, color="#8000FF", family="Rubik, sans-serif"),  # גופן רוביק
-            tickfont=dict(size=14, color="#333333", family="Rubik, sans-serif"),  # גופן רוביק
+            tickfont=dict(size=12, color="#333333", family="Rubik, sans-serif"),  # גופן רוביק
             title_standoff=60,
             gridcolor='rgba(200,200,200,0.5)',
             zeroline=False,
