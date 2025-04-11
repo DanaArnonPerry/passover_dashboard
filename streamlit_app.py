@@ -37,49 +37,44 @@ with tab1:
         "שומעים על פייתון. יש תקווה.",
         "קוד ראשון רץ בהצלחה. הנס מתגלה.",
         "מריצים סקריפטים. דיבאגים אינסופיים.",
-        "AI מנקה הכל. בשניות.",
+        "‏AI מנקה הכל. בשניות.",  # הוספנו תו RLM לפני AI לתיקון כיוון הטקסט
         "מציגים להנהלה דשבורד מהחלומות."
     ]
 
     chart_data = pd.DataFrame({"אירוע": events, "מדד חירות": freedom_level, "הערה": funny_notes})
     st.subheader("מדד החירות לאורך יציאת מצרים")
     
-    # יצירת גרף בסיסי
-    fig = px.line(chart_data, x="אירוע", y="מדד חירות", text="הערה", markers=True)
+    # יצירת גרף בסיסי - בלי טקסט על הקו עצמו
+    fig = px.line(chart_data, x="אירוע", y="מדד חירות", markers=True)
     
     # עיצוב קו הגרף והסמנים
     fig.update_traces(
         line=dict(width=4, color='#1f77b4', dash='solid'),
         marker=dict(size=12, symbol='circle', line=dict(width=2, color='darkblue')),
-        textposition="top center",
-        textfont=dict(size=14, family="Arial", color="#333333", weight="bold")
+        text=None  # מוודאים שאין טקסט על הקו
     )
     
-    # כדי שהטקסט לא יעלה על הקו, נזיז אותו קצת למעלה
-    for i, trace in enumerate(fig.data):
-        y_vals = trace.y
-        text_vals = trace.text
-        for j, (y, text) in enumerate(zip(y_vals, text_vals)):
-            # הוספת הערות נפרדות מעל הנקודות
-            fig.add_annotation(
-                x=j,
-                y=y + 0.8,  # הזזה מעל הנקודה
-                text=text,
-                showarrow=False,
-                font=dict(family="Arial", size=13, color="#333333"),
-                bgcolor="rgba(255, 255, 255, 0.8)",
-                bordercolor="#DDDDDD",
-                borderwidth=1,
-                borderpad=4,
-                align="center"
-            )
-        # מסירת הטקסט המקורי מהקו
-        trace.text = None
+    # הוספת annotations מותאמות אישית לכל נקודה
+    for i, row in chart_data.iterrows():
+        fig.add_annotation(
+            x=row["אירוע"],
+            y=row["מדד חירות"],
+            text=row["הערה"],
+            showarrow=False,
+            yshift=15,  # התאמת המיקום מעל הנקודה
+            font=dict(family="Arial", size=13, color="#333333"),
+            bgcolor="rgba(255, 255, 255, 0.8)",
+            bordercolor="#DDDDDD",
+            borderwidth=1,
+            borderpad=4,
+            align="center"
+        )
     
     # עיצוב כללי של הגרף
     fig.update_layout(
         yaxis_range=[0, 11],
         font=dict(family="Arial", size=14, color="#505050"),
+        title=None,  # מסירים כותרת כדי למנוע את ה-undefined
         title_font=dict(size=24, family="Arial", color="darkblue"),
         plot_bgcolor='rgba(240,248,255,0.3)',  # רקע תכלת בהיר מאוד
         paper_bgcolor='white',
