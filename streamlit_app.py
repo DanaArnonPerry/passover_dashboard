@@ -324,7 +324,7 @@ with tab1:
         font=dict(family="Rubik, sans-serif", size=14, color="#505050"),  # הגדרת גופן כללית
         xaxis=dict(
             gridcolor='rgba(200,200,200,0.2)',
-            howline=True,   
+            showline=True,     
             linecolor='#000000',   
             linewidth=2,     
             zeroline=False,
