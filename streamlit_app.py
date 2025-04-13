@@ -474,50 +474,39 @@ with tab1:
     }
     
     # התאמות למובייל - אפשרויות בתצוגות שונות
-    col1, col2 = st.columns([3, 1])
+    col1, col2 = st.columns([2, 1])
     
-    with col1:
-        # הצגת הגרף עם הגדרות משודרגות
-        chart_container = st.plotly_chart(
-            fig, 
-            config=config,
-            use_container_width=True
-        )
-    
+    # הצגת כרטיסיות מידע וסלייסר בחירה בצד ימין
     with col2:
-        # הצגת כרטיסיות מידע למובייל
+        # הצגת כרטיסיות מידע
         st.markdown("""
-        <div class="mobile-view">
-            <div style="font-size:14px; font-family: Rubik, sans-serif; margin-bottom:10px;">
-                <b>בחרו שלב לפרטים:</b>
-            </div>
+        <div style="font-size:16px; font-family: Rubik, sans-serif; margin-bottom:15px; text-align:center;">
+            <b>בחרו שלב לפרטים:</b>
         </div>
         """, unsafe_allow_html=True)
         
-        # רשימה ללחיצה מותאמת למסכים קטנים
-        selected_event = st.selectbox(
-            label="בחרו שלב",
+        # רשימה ללחיצה עם סלייסר יפה
+        selected_event = st.select_slider(
+            label="בחרו שלב במסע הדאטה",
             options=range(len(events)),
             format_func=lambda x: f"{safe_icons[x]} {short_names[x]}",
             label_visibility="collapsed"
         )
         
         if selected_event is not None:
-            # כרטיסיית מידע למובייל
+            # כרטיסיית מידע
             st.markdown(f"""
-            <div class="mobile-view">
-                <div style="background-color:{chart_data.iloc[selected_event]['צבע']}; padding:15px; border-radius:10px; color:white; font-family:Rubik, sans-serif;">
-                    <h4 style="margin-top:0;">{chart_data.iloc[selected_event]['אייקון']} {chart_data.iloc[selected_event]['אירוע']}</h4>
-                    <p style="font-size:14px; margin-bottom:5px;"><b>מדד החירות:</b> {chart_data.iloc[selected_event]['מדד_חירות']}/10</p>
-                    <p style="font-size:14px; margin-bottom:5px;"><b>טכנולוגיה:</b> {chart_data.iloc[selected_event]['טכנולוגיה']}</p>
-                    <p style="font-size:14px; font-style:italic;">{chart_data.iloc[selected_event]['הערה']}</p>
-                </div>
+            <div style="background-color:{chart_data.iloc[selected_event]['צבע']}; padding:15px; border-radius:10px; color:white; font-family:Rubik, sans-serif; margin-top:15px;">
+                <h4 style="margin-top:0;">{chart_data.iloc[selected_event]['אייקון']} {chart_data.iloc[selected_event]['אירוע']}</h4>
+                <p style="font-size:14px; margin-bottom:5px;"><b>מדד החירות:</b> {chart_data.iloc[selected_event]['מדד_חירות']}/10</p>
+                <p style="font-size:14px; margin-bottom:5px;"><b>טכנולוגיה:</b> {chart_data.iloc[selected_event]['טכנולוגיה']}</p>
+                <p style="font-size:14px; font-style:italic;">{chart_data.iloc[selected_event]['הערה']}</p>
             </div>
             """, unsafe_allow_html=True)
             
             # הצגת מד התקדמות ויזואלי למדד החירות
             st.markdown(f"""
-            <div class="mobile-view" style="margin-top:15px;">
+            <div style="margin-top:15px;">
                 <div style="width:100%; background-color:#e0e0e0; height:20px; border-radius:10px; overflow:hidden;">
                     <div style="width:{chart_data.iloc[selected_event]['מדד_חירות']*10}%; height:100%; background-color:{chart_data.iloc[selected_event]['צבע']}; text-align:center; color:white; font-size:12px; line-height:20px;">
                         {chart_data.iloc[selected_event]['מדד_חירות']}/10
@@ -525,6 +514,15 @@ with tab1:
                 </div>
             </div>
             """, unsafe_allow_html=True)
+    
+    # הצגת הגרף בצד שמאל (בעברית זה מימין לשמאל, אז הגרף יהיה משמאל והסלייסר מימין)
+    with col1:
+        # הצגת הגרף עם הגדרות משודרגות
+        chart_container = st.plotly_chart(
+            fig, 
+            config=config,
+            use_container_width=True
+        )
     
     # הסבר נוסף אחרי הגרף
     st.markdown("""
