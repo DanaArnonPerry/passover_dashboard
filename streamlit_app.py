@@ -436,7 +436,7 @@ with tab1:
             tickmode='array',
             tickvals=events,
             ticktext=["" for _ in events],  # הסרת התוויות בציר X למובייל
-            tickfont=dict(size=0, family="Rubik, sans-serif")  # גודל 0 להסתרה מוחלטת
+            tickfont=dict(size=1, family="Rubik, sans-serif", color='rgba(0,0,0,0.01)')  # גודל מינימלי והצבע שקוף כמעט לחלוטין
         ),
         yaxis=dict(
             title="",
