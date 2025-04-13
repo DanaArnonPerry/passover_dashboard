@@ -590,7 +590,11 @@ with tab3:
         else:
             st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px;'>עוד מאמץ קטן ואת בדרך למצוא אפיקומן</div>", unsafe_allow_html=True)
     else:
-st.markdown("<div style='your-style-here'></div>", unsafe_allow_html=True)st.set_page_config(page_title="מדד החירות בפסח", layout="wide")  
+st.markdown("""
+    <div style='your-style-here'>
+        Your content here
+    </div>
+    """, unsafe_allow_html=True)
 
 # פונקציה להמרת תמונה לbase64 לשימוש ב-HTML
 def get_image_as_base64(image_path):
