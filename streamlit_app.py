@@ -570,11 +570,11 @@ with tab2:
             else:
                 score += 0.5
 
-        if score >= 3:
+        if score >= 4:
             st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px;'>🧠 יצאת החכם – הדאטה אצלך בידיים טובות. אתה יודע לשאול, לבדוק ולבנות דשבורדים בזמן שכולם עוד שואלים מה זה KPI.</div>", unsafe_allow_html=True)
-        elif score >= 2:
+        elif score >= 2.5:
             st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px;'>😈 יצאת הרשע – אתה שואל שאלות, אבל רק אם זה משרת אותך. בוא נגיד שדאטה קיים, אבל אתה מעדיף אינטואיציה.</div>", unsafe_allow_html=True)
-        elif score >= 1:
+        elif score >= 1.5:
             st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px;'>🤔 יצאת התם – אתה מתעניין, אבל עוד קצת תרגול ותהיה מאסטר של דאטה. תמשיך לשאול!</div>", unsafe_allow_html=True)
         else:
             st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px;'>😶 יצאת שאינו יודע לשאול – אבל זה בסדר! כל דאטה-אנליסט מתחיל ככה. נתחיל מהבנת סוגי גרפים ונמשיך משם!</div>", unsafe_allow_html=True)
