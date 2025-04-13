@@ -231,138 +231,311 @@ with tab0:
         </div>
         """, unsafe_allow_html=True)
   
-# טאב 1 – גרף מדד החירות
+# טאב 1 – גרף מדד החירות - קוד משודרג!
 with tab1:
     # הסבר קצר לפני הגרף
     st.markdown("""
     <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-family: 'Rubik', sans-serif;">
-    <h3 style="margin-top: 0; font-family: 'Rubik', sans-serif;">מדד החירות לאורך יציאת מצרים - המסע מעבדות לחירות דיגיטלית</h3>
-    <p style="font-family: 'Rubik', sans-serif;">הגרף הבא מציג את רמת החירות הדיגיטלית בכל שלב של עבודה עם נתונים, בהשוואה לשלבי יציאת מצרים המסורתית. 
-    ככל שעולים בסולם, כך גדלה החירות מעבודה ידנית מייגעת לעבר אוטומציה משחררת.</p>
+    <h3 style="margin-top: 0; font-family: 'Rubik', sans-serif;">מדד החירות הדיגיטלית: המסע מעבדות לחירות</h3>
+    <p style="font-family: 'Rubik', sans-serif;">הגרף הבא מציג את רמת החירות הדיגיטלית בכל שלב של עבודה עם נתונים, בהשוואה לשלבי יציאת מצרים.
+    לחצו על הנקודות בגרף כדי לגלות פרטים נוספים על כל שלב במסע!</p>
     </div>
     """, unsafe_allow_html=True)
     
+    # נתונים למדד החירות
     events = [
-        "שעבוד במצרים", "הולדת משה", "הסנה הבוער", "תחילת המכות",
-        "יציאה ממצרים", "קריעת ים סוף"
+        "שעבוד במצרים",
+        "הולדת משה", 
+        "הסנה הבוער", 
+        "תחילת המכות",
+        "יציאה ממצרים", 
+        "קריעת ים סוף"
     ]
     
     freedom_level = [1, 2, 3, 1, 5, 8]
     
     funny_notes = [
-        "מנקים אקסלים ידנית",
-        "שומעים על פייתון",
-        "קוד ראשון רץ בהצלחה",
-        "מריצים סקריפטים עם ים דיבאגים",
-        "בינה מלאכותית מנקה הכל",
-        "מציגים להנהלה דשבורד מהחלומות"
+        "מנקים אקסלים ידנית ומעתיקים נתונים בלי סוף",
+        "שומעים על פייתון ולומדים שיש חיים אחרי אקסל",
+        "קוד ראשון רץ בהצלחה! תחושת חירות ראשונית",
+        "מריצים סקריפטים אבל נתקעים בים של דיבאגים",
+        "בינה מלאכותית מנקה ומעבדת את הכל אוטומטית",
+        "מציגים להנהלה דשבורד אינטראקטיבי מהחלומות"
     ]
     
-    # שימוש בשמות מקוצרים לתוויות X במובייל
-    shortened_events = {
-        "שעבוד במצרים": "שעבוד",
-        "הולדת משה": "משה", 
-        "הסנה הבוער": "הסנה",
-        "תחילת המכות": "המכות", 
-        "יציאה ממצרים": "יציאה",
-        "קריעת ים סוף": "קריעה"
+    tech_notes = [
+        "Excel + העתק הדבק",
+        "Jupyter Notebook",
+        "Python scripts",
+        "Data pipeline ראשוני",
+        "AI-assisted Analytics",
+        "Streamlit + BI Dashboards"
+    ]
+    
+    # קיצורים למובייל
+    short_names = ["שעבוד", "משה", "הסנה", "המכות", "יציאה", "קריעה"]
+    
+    # אייקונים טקסטואליים בטוחים שלא יגרמו לבעיות תאימות
+    safe_icons = ["🧱", "👶", "🔥", "🐸", "👣", "💧"]
+    
+    # בניית DataFrame עם כל המידע
+    chart_data = pd.DataFrame({
+        "אירוע": events,
+        "מדד_חירות": freedom_level,
+        "הערה": funny_notes,
+        "טכנולוגיה": tech_notes,
+        "צבע": ["#8B4513", "#FFD700", "#FF4500", "#800000", "#1E90FF", "#00BFFF"],
+        "אייקון": safe_icons,
+        "שם_קצר": short_names
+    })
+    
+    # יצירת פתרון למובייל - תצוגת אייקונים ושמות למעלה
+    # בדיקה אם אנחנו במובייל באמצעות CSS
+    st.markdown("""
+    <style>
+    @media (max-width: 768px) {
+        .mobile-labels {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 5px;
+            background-color: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            direction: rtl;
+        }
+        
+        .mobile-label-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        
+        .mobile-icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: white;
+        }
+        
+        .mobile-label-text {
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+        }
     }
     
-    # יצירת DataFrame
-    chart_data = pd.DataFrame({"אירוע": events, "מדד חירות": freedom_level, "הערה": funny_notes})
+    @media (min-width: 769px) {
+        .mobile-labels {
+            display: none;
+        }
+    }
+    </style>
+    """, unsafe_allow_html=True)
     
-    # יצירת עותק עם שמות מקוצרים למובייל
-    mobile_chart_data = chart_data.copy()
-    mobile_chart_data["אירוע"] = mobile_chart_data["אירוע"].map(lambda x: shortened_events.get(x, x))
+    # יצירת שורת אייקונים למובייל
+    mobile_labels_html = """
+    <div class="mobile-labels">
+    """
     
-    # יצירת גרף קבוע (לא רספונסיבי) לטלפון נייד
+    for i, row in chart_data.iterrows():
+        short_name = row["שם_קצר"]
+        icon = row["אייקון"]
+        color = row["צבע"]
+        
+        mobile_labels_html += f"""
+        <div class="mobile-label-item">
+            <div class="mobile-icon-circle" style="background-color: {color};">{icon}</div>
+            <div class="mobile-label-text">{short_name}</div>
+        </div>
+        """
+    
+    mobile_labels_html += """
+    </div>
+    """
+    
+    st.markdown(mobile_labels_html, unsafe_allow_html=True)
+    
+    # יצירת גרף אינטראקטיבי חדש
     fig = go.Figure()
     
-    # הוספת הקו והנקודות עם החלקה
+    # הוספת אזור צבעוני ברקע להמחשת רמות החירות
+    fig.add_trace(go.Scatter(
+        x=[events[0], events[-1]],
+        y=[10, 10],
+        fill='tozeroy',
+        fillcolor='rgba(144, 238, 144, 0.2)',
+        line=dict(width=0),
+        showlegend=False,
+        hoverinfo='none'
+    ))
+    
+    # הוספת קו החירות עם החלקה
     fig.add_trace(go.Scatter(
         x=events,
         y=freedom_level,
-        mode='lines+markers',
+        mode='lines',
         line=dict(
-            width=4, 
-            color='#000000', 
-            dash='solid', 
-            shape='spline',  # מוסיף החלקה לקו
-            smoothing=1.3    # מגדיר את רמת ההחלקה
+            width=3, 
+            color='#8000FF', 
+            shape='spline',
+            smoothing=1.3
         ),
-        marker=dict(size=12, symbol='circle', line=dict(width=2, color='#000000'))
-    ))
-      
-    
-    # הוספת annotations מותאמות אישית לכל נקודה
-    for i, row in chart_data.iterrows():
-        # ביצוע טקסט קצר יותר למובייל
-        short_text = row["הערה"].split('.')[0] + '.' if '.' in row["הערה"] else row["הערה"]
-        
-        fig.add_annotation(
-            x=row["אירוע"],
-            y=row["מדד חירות"],
-            text=short_text,
-            showarrow=False,
-            yshift=50,
-            font=dict(
-                family="Rubik, sans-serif",  # שינוי לגופן רוביק
-                size=13, 
-                color="#333333",
-                weight="bold"
-            ),           
-            borderpad=4,
-            align="center"
-        )
-    
-    # עיצוב כללי של הגרף
-    fig.update_layout(
-        title=None,
         showlegend=False,
-        plot_bgcolor='rgba(240,248,255,0.3)',
-        paper_bgcolor='white',
-        font=dict(family="Rubik, sans-serif", size=14, color="#505050"),  # הגדרת גופן כללית
+        hoverinfo='none'
+    ))
+    
+    # הוספת נקודות אינטראקטיביות לכל שלב
+    for i, row in chart_data.iterrows():
+        fig.add_trace(go.Scatter(
+            x=[row["אירוע"]],
+            y=[row["מדד_חירות"]],
+            mode='markers+text',
+            marker=dict(
+                size=30, 
+                color=row["צבע"],
+                symbol='circle',
+                line=dict(width=2, color='white')
+            ),
+            text=row["אייקון"],
+            textposition="middle center",
+            textfont=dict(size=16),
+            name=row["אירוע"],
+            customdata=[[
+                row["אירוע"], 
+                row["הערה"],
+                row["טכנולוגיה"],
+                row["מדד_חירות"]
+            ]],
+            hovertemplate="<b>%{customdata[0]}</b><br>" + 
+                          "מדד החירות: %{customdata[3]}<br>" +
+                          "טכנולוגיה: %{customdata[2]}<br>" +
+                          "<i>%{customdata[1]}</i><extra></extra>"
+        ))
+    
+    # עיצוב לגרף הראשי (desktop)
+    fig.update_layout(
+        template="plotly_white",
+        font=dict(family="Rubik, sans-serif", size=14),
+        plot_bgcolor='rgba(248,249,250,0.8)',
         xaxis=dict(
-            gridcolor='rgba(200,200,200,0.2)',
-            showline=True,     
-            linecolor='#000000',   
-            linewidth=2,     
+            title="",
+            showgrid=False,
             zeroline=False,
-            tickangle=0,
-            tickfont=dict(size=12, color="#333333", family="Rubik, sans-serif",weight="bold"),  # גופן רוביק
-            domain=[0.02, 1],  # הגדלת אזור הגרף בצדדים
-            fixedrange=True  # מניעת הזזה בציר X
+            showline=True,
+            linecolor='rgba(0,0,0,0.2)',
+            tickmode='array',
+            tickvals=events,
+            ticktext=["" for _ in events],  # הסרת התוויות בציר X למובייל
+            tickfont=dict(size=0, family="Rubik, sans-serif")  # גודל 0 להסתרה מוחלטת
         ),
         yaxis=dict(
-            tickfont=dict(size=12, color="#333333", family="Rubik, sans-serif"),  # גופן רוביק
-            title_standoff=60,
-            gridcolor='rgba(200,200,200,0.5)',
-            showline=True,   
-            linecolor='#000000',   
-            linewidth=2,     
+            title="",
+            range=[0, 10],
+            showgrid=True,
+            gridcolor='rgba(0,0,0,0.07)',
             zeroline=False,
-            domain=[0.02, 0.98],  # הגדלת אזור הגרף למעלה ולמטה
-            range=[0, 11]
+            tickvals=list(range(1, 10, 2)),
+            ticktext=["עבדות<br>דיגיטלית", "", "חירות<br>מוגבלת", "", "חירות<br>משמעותית"],
+            tickfont=dict(size=12, family="Rubik, sans-serif")
         ),
-        margin=dict(l=10, r=10, t=30, b=50),
-        height=550,  # גובה קבוע במקום רספונסיבי
-        width=800,   # רוחב קבוע במקום רספונסיבי
-        autosize=False,  # ביטול הגודל האוטומטי
+        margin=dict(l=10, r=10, t=10, b=10),
+        showlegend=False,
+        height=500,
+        hoverlabel=dict(
+            bgcolor="white",
+            font_size=14,
+            font_family="Rubik, sans-serif"
+        ),
+        hovermode="closest",
     )
     
-    # הצגת הגרף עם הגדרות לא רספונסיביות
-    st.plotly_chart(fig, config={
-        'displayModeBar': False,
-        'responsive': True,  # ביטול רספונסיביות
-        'staticPlot': False   # הפיכה לתמונה סטטית לחלוטין
-    })
+    # הגדרת כפתורים שיוצגו בגרף
+    config = {
+        'displayModeBar': True,
+        'modeBarButtonsToRemove': [
+            'zoom', 'pan', 'select', 'zoomIn', 'zoomOut', 
+            'autoScale', 'resetScale', 'lasso2d'
+        ],
+        'displaylogo': False,
+        'responsive': True
+    }
+    
+    # התאמות למובייל - אפשרויות בתצוגות שונות
+    col1, col2 = st.columns([3, 1])
+    
+    with col1:
+        # הצגת הגרף עם הגדרות משודרגות
+        chart_container = st.plotly_chart(
+            fig, 
+            config=config,
+            use_container_width=True
+        )
+    
+    with col2:
+        # הצגת כרטיסיות מידע למובייל
+        st.markdown("""
+        <div class="mobile-view">
+            <div style="font-size:14px; font-family: Rubik, sans-serif; margin-bottom:10px;">
+                <b>בחרו שלב לפרטים:</b>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # רשימה ללחיצה מותאמת למסכים קטנים
+        selected_event = st.selectbox(
+            label="בחרו שלב",
+            options=range(len(events)),
+            format_func=lambda x: f"{safe_icons[x]} {short_names[x]}",
+            label_visibility="collapsed"
+        )
+        
+        if selected_event is not None:
+            # כרטיסיית מידע למובייל
+            st.markdown(f"""
+            <div class="mobile-view">
+                <div style="background-color:{chart_data.iloc[selected_event]['צבע']}; padding:15px; border-radius:10px; color:white; font-family:Rubik, sans-serif;">
+                    <h4 style="margin-top:0;">{chart_data.iloc[selected_event]['אייקון']} {chart_data.iloc[selected_event]['אירוע']}</h4>
+                    <p style="font-size:14px; margin-bottom:5px;"><b>מדד החירות:</b> {chart_data.iloc[selected_event]['מדד_חירות']}/10</p>
+                    <p style="font-size:14px; margin-bottom:5px;"><b>טכנולוגיה:</b> {chart_data.iloc[selected_event]['טכנולוגיה']}</p>
+                    <p style="font-size:14px; font-style:italic;">{chart_data.iloc[selected_event]['הערה']}</p>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # הצגת מד התקדמות ויזואלי למדד החירות
+            st.markdown(f"""
+            <div class="mobile-view" style="margin-top:15px;">
+                <div style="width:100%; background-color:#e0e0e0; height:20px; border-radius:10px; overflow:hidden;">
+                    <div style="width:{chart_data.iloc[selected_event]['מדד_חירות']*10}%; height:100%; background-color:{chart_data.iloc[selected_event]['צבע']}; text-align:center; color:white; font-size:12px; line-height:20px;">
+                        {chart_data.iloc[selected_event]['מדד_חירות']}/10
+                    </div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
     
     # הסבר נוסף אחרי הגרף
     st.markdown("""
-    <div style="background-color: rgba(242,242,242,0.5); padding: 15px; border-radius: 5px; border-right: 4px solid #8000FF; margin-top: 20px; font-family: 'Rubik', sans-serif;">
-    <h4 style="color: #8000FF; margin-top: 0; font-family: 'Rubik', sans-serif;">המסע מעבדות לחירות בעולם הדאטה</h4>
-    <p style="font-family: 'Rubik', sans-serif;">כפי שניתן לראות בגרף, האנליסט מתחיל את דרכו בעבודה ידנית מפרכת עם אקסלים, ממש כמו עבודת פרך במצרים.
-    דרך תהליך אוטומציה הדרגתי, הוא עובר את ים הדיבאגים, עד שמגיע לחירות מלאה עם דשבורדים אוטומטיים ותובנות שמשנות את הארגון.</p>
+    <div style="background-color:rgba(128,0,255,0.05); padding:15px; border-radius:8px; border-right:4px solid #8000FF; margin-top:30px; font-family:Rubik, sans-serif;">
+        <h4 style="color:#8000FF; margin-top:0; font-family:Rubik, sans-serif; display:flex; align-items:center;">
+            <span style="margin-left:10px;">⭐</span> המסע מעבדות לחירות בעולם הדאטה
+        </h4>
+        <p>בעולם הדאטה, אנחנו עוברים מסע דומה ליציאת מצרים:</p>
+        <ul style="padding-right:20px;">
+            <li><b>שלב העבדות:</b> עבודה ידנית עם אקסלים ללא סוף וללא אוטומציה</li>
+            <li><b>שלבי המעבר:</b> דרך נפתול הדיבאגים והלמידה של כלים חדשים</li>
+            <li><b>גאולת הדאטה:</b> כשמגיעים לאוטומציה מלאה, דשבורדים חכמים ותובנות עמוקות</li>
+        </ul>
+        <p>בכל שלב במסע, אנו משתחררים יותר מעבודה ידנית ומתקרבים לחירות דיגיטלית אמיתית!</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -442,7 +615,7 @@ with tab4:
     <p><strong>מאחורי הקלעים של השיחה:</strong></p>
     <blockquote>
     "אם כל שאר הקבצים תקינים (והם כן), הדשבורד שלך יעלה חלק כמו מצה עם שוקולד"<br> 
-    "אנחנו במכת “כמעט עובד” – וזה הכי כואב" 😅<br>
+    "אנחנו במכת "כמעט עובד" – וזה הכי כואב" 😅<br>
     "אוקיי בואי ננשום עמוק ונעוף על זה יחד" 💨🛠️<br>
     "ברור שיש תיקונים – את הרי לא תתני לדשבורד לצאת בלי שהוא פסח פרפקט"💅📊<br>
 
