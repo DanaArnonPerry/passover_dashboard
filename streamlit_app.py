@@ -545,19 +545,13 @@ with tab2:
     st.markdown("<h3 style='font-family: Rubik, sans-serif;'>🔍 איזה בן דאטה אתה?</h3>", unsafe_allow_html=True)
     st.markdown("<p style='font-family: Rubik, sans-serif;'>ענה על כמה שאלות קצרות וגלֵה איזה טיפוס אנליטי מסתתר בך.</p>", unsafe_allow_html=True)
 
-    q1 = st.radio("כשאתה מקבל דאטה-סט ענקי אקסל עם Missing Values:", [
-        "אני כותב קוד שישלים את כל החוסרים",
-        "מה זה קשור אליי? שישלח לאנליסט אחר",
-        "למה יש Missing בכלל? זה באג?",
-        "משהו לא נראה תקין בדאטה אבל אני לא בטוח מה"], index=None)
-
-    q2 = st.radio("בפגישת דאטה, מה התגובה שלך?", [
+    q1 = st.radio("בפגישת דאטה, מה התגובה שלך?", [
         "שואל שאלות עומק ומבקש מקור נתונים",
         "מציע להתעלם מהדאטה כי אין כמו אינטואיציה טובה",
         "מופתע שיש פגישה בכלל",
         "מחייך ומתעלם, גם ככה אף אחד לא מבין שום דבר"], index=None)
 
-    q3 = st.radio("איך אתה מרגיש לגבי דשבורדים?", [
+    q2 = st.radio("איך אתה מרגיש לגבי דשבורדים?", [
         "אהבה בלב",
         "נחמד אבל overrated",
         "עדיין מנסה להבין את הקטע של הסלייסרים",
@@ -565,7 +559,7 @@ with tab2:
 
     if st.button("גלה מי אתה או את"):
         score = 0
-        answers = [q1, q2, q3]
+        answers = [q1, q2]
         for ans in answers:
             if "קוד" in ans or "שואל" in ans or "הכרחי" in ans:
                 score += 2
