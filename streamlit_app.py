@@ -1,349 +1,246 @@
-# טאב 1 – גרף מדד החירות המשודרג
-with tab1:
-    # הסבר קצר לפני הגרף
-    st.markdown("""
-    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-family: 'Rubik', sans-serif;">
-    <h3 style="margin-top: 0; font-family: 'Rubik', sans-serif;">מדד החירות הדיגיטלית: המסע מעבדות לחירות 🚀</h3>
-    <p style="font-family: 'Rubik', sans-serif;">הגרף הבא מציג את רמת החירות הדיגיטלית בכל שלב של עבודה עם נתונים, בהשוואה לשלבי יציאת מצרים.
-    לחצו על הנקודות בגרף כדי לגלות פרטים נוספים על כל שלב במסע!</p>
-    </div>
-    """, unsafe_allow_html=True)
+import React, { useState, useEffect } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+const FreedomIndexChart = () => {
+  // נתוני הגרף
+  const data = [
+    { id: 0, name: "שעבוד במצרים", value: 1, icon: "🧱", color: "#8B4513", note: "מנקים אקסלים ידנית ומעתיקים נתונים בלי סוף", tech: "Excel + העתק הדבק" },
+    { id: 1, name: "הולדת משה", value: 2, icon: "👶", color: "#FFD700", note: "שומעים על פייתון ולומדים שיש חיים אחרי אקסל", tech: "Jupyter Notebook" },
+    { id: 2, name: "הסנה הבוער", value: 3, icon: "🔥", color: "#FF4500", note: "קוד ראשון רץ בהצלחה! תחושת חירות ראשונית", tech: "Python scripts" },
+    { id: 3, name: "תחילת המכות", value: 1, icon: "🐸", color: "#800000", note: "מריצים סקריפטים אבל נתקעים בים של דיבאגים", tech: "Data pipeline ראשוני" },
+    { id: 4, name: "יציאה ממצרים", value: 5, icon: "🚶‍♂️", color: "#1E90FF", note: "בינה מלאכותית מנקה ומעבדת את הכל אוטומטית", tech: "AI-assisted Analytics" },
+    { id: 5, name: "קריעת ים סוף", value: 8, icon: "🌊", color: "#00BFFF", note: "מציגים להנהלה דשבורד אינטראקטיבי מהחלומות", tech: "Streamlit + BI Dashboards" }
+  ];
+
+  // מצב נוכחי של שלב נבחר (הוק סטייט)
+  const [selectedPoint, setSelectedPoint] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  // בדיקה אם המכשיר הוא מובייל
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
     
-    # נתונים למדד החירות
-    events = [
-        "שעבוד במצרים",
-        "הולדת משה", 
-        "הסנה הבוער", 
-        "תחילת המכות",
-        "יציאה ממצרים", 
-        "קריעת ים סוף"
-    ]
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
     
-    freedom_level = [1, 2, 3, 1, 5, 8]
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
+
+  // אנימציה של הגרף בטעינה הראשונית
+  useEffect(() => {
+    setIsAnimating(true);
+    const timer = setTimeout(() => {
+      setIsAnimating(false);
+    }, 1500);
     
-    funny_notes = [
-        "מנקים אקסלים ידנית ומעתיקים נתונים בלי סוף",
-        "שומעים על פייתון ולומדים שיש חיים אחרי אקסל",
-        "קוד ראשון רץ בהצלחה! תחושת חירות ראשונית",
-        "מריצים סקריפטים אבל נתקעים בים של דיבאגים",
-        "בינה מלאכותית מנקה ומעבדת את הכל אוטומטית",
-        "מציגים להנהלה דשבורד אינטראקטיבי מהחלומות"
-    ]
-    
-    tech_notes = [
-        "Excel + העתק הדבק",
-        "Jupyter Notebook",
-        "Python scripts",
-        "Data pipeline ראשוני",
-        "AI-assisted Analytics",
-        "Streamlit + BI Dashboards"
-    ]
-    
-    # צבעים ואייקונים לכל שלב
-    stage_colors = [
-        "#8B4513",  # חום כהה לשעבוד
-        "#FFD700",  # זהב להולדת משה
-        "#FF4500",  # כתום-אדום לסנה הבוער
-        "#800000",  # אדום כהה למכות
-        "#1E90FF",  # כחול ליציאה ממצרים
-        "#00BFFF"   # כחול בהיר לקריעת ים סוף
-    ]
-    
-    stage_icons = ["🧱", "👶", "🔥", "🐸", "🚶‍♂️", "🌊"]
-    
-    # קיצורים למובייל
-    short_names = ["שעבוד", "משה", "הסנה", "המכות", "יציאה", "קריעה"]
-    
-    # בניית DataFrame עם כל המידע
-    chart_data = pd.DataFrame({
-        "אירוע": events,
-        "מדד_חירות": freedom_level,
-        "הערה": funny_notes,
-        "טכנולוגיה": tech_notes,
-        "צבע": stage_colors,
-        "אייקון": stage_icons,
-        "שם_קצר": short_names
-    })
-    
-    # יצירת פתרון למובייל - תצוגת אייקונים ושמות למעלה
-    # בדיקה אם אנחנו במובייל באמצעות CSS
-    st.markdown("""
-    <style>
-    @media (max-width: 768px) {
-        .mobile-labels {
-            display: flex;
-            overflow-x: auto;
-            padding: 10px 5px;
-            background-color: white;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            direction: rtl;
-        }
-        
-        .mobile-label-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 60px;
-            margin: 0 5px;
-            cursor: pointer;
-        }
-        
-        .mobile-icon-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            margin-bottom: 5px;
-            color: white;
-        }
-        
-        .mobile-label-text {
-            font-size: 12px;
-            font-weight: bold;
-            text-align: center;
-            white-space: nowrap;
-        }
-    }
-    
-    @media (min-width: 769px) {
-        .mobile-labels {
-            display: none;
-        }
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # יצירת שורת אייקונים למובייל
-    mobile_labels_html = """
-    <div class="mobile-labels">
-    """
-    
-    for i, row in chart_data.iterrows():
-        short_name = row["שם_קצר"]
-        icon = row["אייקון"]
-        color = row["צבע"]
-        
-        mobile_labels_html += f"""
-        <div class="mobile-label-item">
-            <div class="mobile-icon-circle" style="background-color: {color};">{icon}</div>
-            <div class="mobile-label-text">{short_name}</div>
-        </div>
-        """
-    
-    mobile_labels_html += """
-    </div>
-    """
-    
-    st.markdown(mobile_labels_html, unsafe_allow_html=True)
-    
-    # יצירת גרף אינטראקטיבי חדש
-    fig = go.Figure()
-    
-    # הוספת אזור צבעוני ברקע להמחשת רמות החירות
-    fig.add_trace(go.Scatter(
-        x=[events[0], events[-1]],
-        y=[10, 10],
-        fill='tozeroy',
-        fillcolor='rgba(144, 238, 144, 0.2)',
-        line=dict(width=0),
-        showlegend=False,
-        hoverinfo='none'
-    ))
-    
-    # הוספת קו החירות עם החלקה
-    fig.add_trace(go.Scatter(
-        x=events,
-        y=freedom_level,
-        mode='lines',
-        line=dict(
-            width=3, 
-            color='#8000FF', 
-            shape='spline',
-            smoothing=1.3
-        ),
-        showlegend=False,
-        hoverinfo='none'
-    ))
-    
-    # הוספת נקודות אינטראקטיביות לכל שלב
-    for i, row in chart_data.iterrows():
-        fig.add_trace(go.Scatter(
-            x=[row["אירוע"]],
-            y=[row["מדד_חירות"]],
-            mode='markers+text',
-            marker=dict(
-                size=30, 
-                color=row["צבע"],
-                symbol='circle',
-                line=dict(width=2, color='white')
-            ),
-            text=row["אייקון"],
-            textposition="middle center",
-            textfont=dict(size=16),
-            name=row["אירוע"],
-            customdata=[[
-                row["אירוע"], 
-                row["הערה"],
-                row["טכנולוגיה"],
-                row["מדד_חירות"]
-            ]],
-            hovertemplate="<b>%{customdata[0]}</b><br>" + 
-                          "מדד החירות: %{customdata[3]}<br>" +
-                          "טכנולוגיה: %{customdata[2]}<br>" +
-                          "<i>%{customdata[1]}</i><extra></extra>"
-        ))
-    
-    # הוספת תוויות לציר Y שמציינות רמות חירות
-    freedom_labels = [
-        "עבדות<br>דיגיטלית",
-        "",
-        "חירות<br>מוגבלת",
-        "",
-        "חירות<br>בינונית",
-        "",
-        "חירות<br>משמעותית",
-        "",
-        "חירות<br>מלאה"
-    ]
-    
-    # עיצוב לגרף הראשי (desktop)
-    fig.update_layout(
-        template="plotly_white",
-        font=dict(family="Rubik, sans-serif", size=14),
-        plot_bgcolor='rgba(248,249,250,0.8)',
-        xaxis=dict(
-            title="",
-            showgrid=False,
-            zeroline=False,
-            showline=True,
-            linecolor='rgba(0,0,0,0.2)',
-            tickfont=dict(size=14, family="Rubik, sans-serif")
-        ),
-        yaxis=dict(
-            title="",
-            range=[0, 10],
-            showgrid=True,
-            gridcolor='rgba(0,0,0,0.07)',
-            zeroline=False,
-            tickvals=list(range(1, 10, 2)),
-            ticktext=[freedom_labels[i] for i in range(0, 9, 2)],
-            tickfont=dict(size=12, family="Rubik, sans-serif")
-        ),
-        margin=dict(l=10, r=10, t=10, b=10),
-        showlegend=False,
-        height=500,
-        hoverlabel=dict(
-            bgcolor="white",
-            font_size=14,
-            font_family="Rubik, sans-serif"
-        ),
-        hovermode="closest",
-    )
-    
-    # הגדרת כפתורים שיוצגו בגרף
-    config = {
-        'displayModeBar': True,
-        'modeBarButtonsToRemove': [
-            'zoom', 'pan', 'select', 'zoomIn', 'zoomOut', 
-            'autoScale', 'resetScale', 'lasso2d'
-        ],
-        'displaylogo': False,
-        'responsive': True
-    }
-    
-    # בדיקה האם המשתמש גולש ממובייל דרך CSS Media Query
-    st.markdown("""
-    <style>
-    .mobile-view, .desktop-view {
-        display: none;
-    }
-    
-    /* מסכים בגודל מובייל */
-    @media (max-width: 768px) {
-        .mobile-view {
-            display: block;
-        }
-    }
-    
-    /* מסכים גדולים יותר */
-    @media (min-width: 769px) {
-        .desktop-view {
-            display: block;
-        }
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # התאמות למובייל - אפשרויות בתצוגות שונות
-    col1, col2 = st.columns([3, 1])
-    
-    with col1:
-        # הצגת הגרף עם הגדרות משודרגות
-        chart_container = st.plotly_chart(
-            fig, 
-            config=config,
-            use_container_width=True
-        )
-    
-    with col2:
-        # הצגת כרטיסיות מידע למובייל
-        st.markdown("""
-        <div class="mobile-view">
-            <div style="font-size:14px; font-family: Rubik, sans-serif; margin-bottom:10px;">
-                <b>בחרו שלב לפרטים:</b>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # רשימה ללחיצה מותאמת למסכים קטנים
-        selected_event = st.selectbox(
-            label="בחרו שלב",
-            options=range(len(events)),
-            format_func=lambda x: f"{stage_icons[x]} {short_names[x]}",
-            label_visibility="collapsed"
-        )
-        
-        if selected_event is not None:
-            # כרטיסיית מידע למובייל
-            st.markdown(f"""
-            <div class="mobile-view">
-                <div style="background-color:{stage_colors[selected_event]}; padding:15px; border-radius:10px; color:white; font-family:Rubik, sans-serif;">
-                    <h4 style="margin-top:0;">{stage_icons[selected_event]} {events[selected_event]}</h4>
-                    <p style="font-size:14px; margin-bottom:5px;"><b>מדד החירות:</b> {freedom_level[selected_event]}/10</p>
-                    <p style="font-size:14px; margin-bottom:5px;"><b>טכנולוגיה:</b> {tech_notes[selected_event]}</p>
-                    <p style="font-size:14px; font-style:italic;">{funny_notes[selected_event]}</p>
+    return () => clearTimeout(timer);
+  }, []);
+
+  // טיפול בלחיצה על נקודה בגרף
+  const handlePointClick = (point) => {
+    setSelectedPoint(point);
+  };
+
+  // רנדור הגרף
+  return (
+    <div className="bg-white rounded-lg shadow-md p-4 font-sans" dir="rtl">
+      {/* כותרת הגרף */}
+      <div className="mb-4 bg-purple-50 p-4 rounded-lg border-r-4 border-purple-700">
+        <h3 className="text-lg font-bold text-purple-800 flex items-center mb-2">
+          <span className="ml-2">📊</span> מדד החירות הדיגיטלית: המסע מעבדות לחירות
+        </h3>
+        <p className="text-sm text-gray-700">
+          לחצו על הנקודות בגרף כדי לגלות כיצד מתקדמים משעבוד הדאטה אל החירות הדיגיטלית!
+        </p>
+      </div>
+
+      {/* רשימת אייקונים למובייל עם שמות המקרא */}
+      {isMobile && (
+        <div className="mb-4 bg-white rounded-lg overflow-x-auto">
+          <div className="flex justify-between px-2 py-3 min-w-full">
+            {data.map((point, index) => (
+              <div 
+                key={index} 
+                className="flex flex-col items-center px-2 cursor-pointer"
+                onClick={() => handlePointClick(point)}
+              >
+                <div 
+                  className="flex items-center justify-center text-lg w-10 h-10 rounded-full mb-1"
+                  style={{ backgroundColor: point.color }}
+                >
+                  {point.icon}
                 </div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # הצגת מד התקדמות ויזואלי למדד החירות
-            st.markdown(f"""
-            <div class="mobile-view" style="margin-top:15px;">
-                <div style="width:100%; background-color:#e0e0e0; height:20px; border-radius:10px; overflow:hidden;">
-                    <div style="width:{freedom_level[selected_event]*10}%; height:100%; background-color:{stage_colors[selected_event]}; text-align:center; color:white; font-size:12px; line-height:20px;">
-                        {freedom_level[selected_event]}/10
-                    </div>
+                <div className="text-xs text-center font-bold whitespace-nowrap">
+                  {point.name.split(" ")[0]}
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-4`}>
+        {/* הגרף */}
+        <div className={`${isMobile ? 'w-full' : 'w-3/4'} h-64 bg-gray-50 rounded-lg`}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis 
+                dataKey={isMobile ? "icon" : "name"}
+                tick={{ 
+                  fontSize: isMobile ? 16 : 12,
+                  fill: '#333'
+                }}
+                height={50}
+                interval={0}
+                angle={0}
+                textAnchor="middle"
+                tickMargin={8}
+              />
+              <YAxis 
+                domain={[0, 10]} 
+                tick={{ fontSize: 12 }}
+                tickCount={6}
+                label={{ 
+                  value: 'רמת החירות', 
+                  angle: -90, 
+                  position: 'left',
+                  style: { textAnchor: 'middle', fontSize: '14px', fill: '#555' }
+                }}
+              />
+              <Tooltip 
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const data = payload[0].payload;
+                    return (
+                      <div className="bg-white p-2 border border-gray-200 rounded shadow-md text-right">
+                        <div className="font-bold text-purple-800">{data.icon} {data.name}</div>
+                        <div className="text-sm mt-1">מדד החירות: {data.value}/10</div>
+                        <div className="text-sm text-gray-600">{data.tech}</div>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="value" 
+                stroke="#8000FF" 
+                strokeWidth={3} 
+                dot={false}
+                activeDot={false}
+                isAnimationActive={isAnimating}
+                animationDuration={1500}
+                animationEasing="ease-in-out"
+              />
+              
+              {/* נקודות אינטראקטיביות עם אייקונים */}
+              {data.map((point) => (
+                <Line
+                  key={point.id}
+                  type="monotone"
+                  dataKey={() => point.value}
+                  stroke="transparent"
+                  dot={{
+                    r: 14,
+                    stroke: 'white',
+                    strokeWidth: 2,
+                    fill: point.color,
+                    cursor: 'pointer'
+                  }}
+                  activeDot={false}
+                  isAnimationActive={isAnimating}
+                  animationDuration={1500 + point.id * 200}
+                  animationEasing="ease-out"
+                  data={[point]}
+                  onClick={() => handlePointClick(point)}
+                  label={{
+                    position: 'center',
+                    value: point.icon,
+                    style: {
+                      fontSize: '14px', 
+                      fontWeight: 'bold',
+                      fill: 'white'
+                    }
+                  }}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* כרטיסיית מידע */}
+        <div className={`${isMobile ? 'w-full' : 'w-1/4'} bg-gray-50 rounded-lg p-4`}>
+          {selectedPoint ? (
+            <div 
+              className="rounded-lg p-4 h-full flex flex-col"
+              style={{ backgroundColor: `${selectedPoint.color}20`, borderRight: `4px solid ${selectedPoint.color}` }}
+            >
+              <div className="text-xl font-bold mb-2 flex items-center">
+                <span className="ml-2">{selectedPoint.icon}</span>
+                {selectedPoint.name}
+              </div>
+              
+              <div className="text-sm mb-3">
+                <span className="font-bold">מדד החירות: </span>
+                <span>{selectedPoint.value}/10</span>
+              </div>
+              
+              <div className="text-sm mb-3">
+                <span className="font-bold">טכנולוגיה: </span>
+                <span>{selectedPoint.tech}</span>
+              </div>
+              
+              <div className="text-sm italic flex-grow">{selectedPoint.note}</div>
+              
+              {/* מד התקדמות ויזואלי */}
+              <div className="mt-4 w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                <div
+                  className="h-full text-xs flex items-center justify-center text-white transition-all duration-500 ease-out"
+                  style={{ 
+                    width: `${selectedPoint.value * 10}%`, 
+                    backgroundColor: selectedPoint.color 
+                  }}
+                >
+                  {selectedPoint.value}/10
+                </div>
+              </div>
             </div>
-            """, unsafe_allow_html=True)
-    
-    # הסבר נוסף אחרי הגרף
-    st.markdown("""
-    <div style="background-color:rgba(128,0,255,0.05); padding:15px; border-radius:8px; border-right:4px solid #8000FF; margin-top:30px; font-family:Rubik, sans-serif;">
-        <h4 style="color:#8000FF; margin-top:0; font-family:Rubik, sans-serif; display:flex; align-items:center;">
-            <span style="margin-left:10px;">📊</span> המסע מעבדות לחירות בעולם הדאטה
-        </h4>
-        <p>בעולם הדאטה, אנחנו עוברים מסע דומה ליציאת מצרים:</p>
-        <ul style="padding-right:20px;">
-            <li><b>שלב העבדות:</b> עבודה ידנית עם אקסלים ללא סוף וללא אוטומציה</li>
-            <li><b>שלבי המעבר:</b> דרך נפתול הדיבאגים והלמידה של כלים חדשים</li>
-            <li><b>גאולת הדאטה:</b> כשמגיעים לאוטומציה מלאה, דשבורדים חכמים ותובנות עמוקות</li>
-        </ul>
-        <p>בכל שלב במסע, אנו משתחררים יותר מעבודה ידנית ומתקרבים לחירות דיגיטלית אמיתית! 🎉</p>
+          ) : (
+            <div className="text-center h-full flex flex-col items-center justify-center text-gray-500">
+              <div className="text-4xl mb-2">👆</div>
+              <div>לחצו על נקודה בגרף לפרטים</div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* מקרא למדדי החירות */}
+      <div className="mt-6 bg-gray-50 p-4 rounded-lg">
+        <h4 className="font-bold text-purple-800 mb-2">🔑 מקרא רמות החירות:</h4>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <div className="flex items-center">
+            <div className="w-4 h-4 bg-gray-400 rounded-full mr-2"></div>
+            <span className="text-sm">1-2: עבדות דיגיטלית</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-4 h-4 bg-blue-400 rounded-full mr-2"></div>
+            <span className="text-sm">3-5: חירות מוגבלת</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-4 h-4 bg-purple-600 rounded-full mr-2"></div>
+            <span className="text-sm">6-10: חירות דיגיטלית מלאה</span>
+          </div>
+        </div>
+      </div>
     </div>
-    """, unsafe_allow_html=True)
+  );
+};
+
+export default FreedomIndexChart;
