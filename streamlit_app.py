@@ -561,20 +561,20 @@ with tab2:
         score = 0
         answers = [q1, q2]
         for ans in answers:
-            if "קוד" in ans or "שואל" in ans or "הכרחי" in ans:
+            if "עומק" in ans or "אהבה" in ans:
                 score += 2
-            elif "מה זה קשור" in ans or "להתחיל מההרגשה" in ans or "מיותר" in ans:
-                score += 0
-            elif "למה יש" in ans or "מופתע" in ans or "עדיין לא מבין" in ans:
+            elif "להתעלם" in ans or "נחמד" in ans:
+                score += 1.5
+            elif "מופתע" in ans or "מנסה" in ans:
                 score += 1
             else:
                 score += 0.5
 
-        if score >= 5:
+        if score >= 2:
             st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px;'>🧠 יצאת החכם – הדאטה אצלך בידיים טובות. אתה יודע לשאול, לבדוק ולבנות דשבורדים בזמן שכולם עוד שואלים מה זה KPI.</div>", unsafe_allow_html=True)
-        elif score >= 3:
-            st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px;'>😈 יצאת הרשע – אתה שואל שאלות, אבל רק אם זה משרת אותך. בוא נגיד שדאטה קיים, אבל אתה מעדיף אינטואיציה.</div>", unsafe_allow_html=True)
         elif score >= 1.5:
+            st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px;'>😈 יצאת הרשע – אתה שואל שאלות, אבל רק אם זה משרת אותך. בוא נגיד שדאטה קיים, אבל אתה מעדיף אינטואיציה.</div>", unsafe_allow_html=True)
+        elif score >= 1:
             st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px;'>🤔 יצאת התם – אתה מתעניין, אבל עוד קצת תרגול ותהיה מאסטר של דאטה. תמשיך לשאול!</div>", unsafe_allow_html=True)
         else:
             st.markdown("<div style='font-family: Rubik, sans-serif; background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px;'>😶 יצאת שאינו יודע לשאול – אבל זה בסדר! כל דאטה-אנליסט מתחיל ככה. נתחיל מהבנת סוגי גרפים ונמשיך משם!</div>", unsafe_allow_html=True)
