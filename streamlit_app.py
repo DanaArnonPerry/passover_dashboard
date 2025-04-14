@@ -564,7 +564,7 @@ with tab2:
             if "עומק" in ans or "אהבה" in ans:
                 score += 3
             elif "להתעלם" in ans or "נחמד" in ans:
-                score += 2
+                score += 1.5
             elif "מופתע" in ans or "להבין" in ans:
                 score += 1
             else:
