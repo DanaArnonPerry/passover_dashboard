@@ -231,7 +231,7 @@ with tab0:
         </div>
         """, unsafe_allow_html=True)
   
-# טאב 1 – גרף מדד החירות - קוד משודרג!
+# טאב 1 – גרף מדד החירות בסגנון פשוט
 with tab1:
     # הסבר קצר לפני הגרף
     st.markdown("""
@@ -242,7 +242,7 @@ with tab1:
     </div>
     """, unsafe_allow_html=True)
     
-    # נתונים למדד החירות - מותאם לפי הנתונים מקובץ הריאקט החדש
+    # נתונים למדד החירות - מסתכל יותר כמו בתמונה שהצגת
     events = [
         "שעבוד במצרים",
         "הולדת משה", 
@@ -279,8 +279,10 @@ with tab1:
     short_names = ["שעבוד", "משה", "הסנה", "המכות", "יציאה", "קריעה", "הארץ"]
     
     # אייקונים טקסטואליים בטוחים שלא יגרמו לבעיות תאימות
-    # עודכן לפי הקוד החדש, אך נשארו 7 שלבים
     safe_icons = ["🧱", "👶", "🔥", "🐸", "👣", "💧", "🏞️"]
+    
+    # צבעים לכל נקודה בגרף - לפי מה שנראה בתמונה
+    colors = ["#8B0000", "#FF4500", "#FF8C00", "#8B0000", "#1E90FF", "#00BFFF", "#4169E1"]
     
     # יצירת DataFrame
     chart_data = pd.DataFrame({
@@ -288,108 +290,36 @@ with tab1:
         "מדד_חירות": freedom_level,
         "הערה": funny_notes,
         "טכנולוגיה": tech_notes,
-        "צבע": ["#8B4513", "#FFD700", "#FF4500", "#800000", "#1E90FF", "#00BFFF", "#32CD32"],
+        "צבע": colors,
         "אייקון": safe_icons,
         "שם_קצר": short_names
     })
     
-    # יצירת פתרון למובייל - תצוגת אייקונים ושמות למעלה
-    # בדיקה אם אנחנו במובייל באמצעות CSS
-    st.markdown("""
-    <style>
-    @media (max-width: 768px) {
-        .mobile-labels {
-            display: flex;
-            overflow-x: auto;
-            padding: 10px 5px;
-            background-color: white;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            direction: rtl;
-        }
-        
-        .mobile-label-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 60px;
-            margin: 0 5px;
-            cursor: pointer;
-        }
-        
-        .mobile-icon-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            margin-bottom: 5px;
-            color: white;
-        }
-        
-        .mobile-label-text {
-            font-size: 12px;
-            font-weight: bold;
-            text-align: center;
-            white-space: nowrap;
-        }
+    # יצירת אינדיקציה למובייל
+    is_mobile = """
+    <script>
+    if (window.innerWidth < 768) {
+        document.documentElement.style.setProperty('--is-mobile', 'true');
+    } else {
+        document.documentElement.style.setProperty('--is-mobile', 'false');
     }
-    
-    @media (min-width: 769px) {
-        .mobile-labels {
-            display: none;
-        }
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # יצירת שורת אייקונים למובייל
-    mobile_labels_html = """
-    <div class="mobile-labels">
+    </script>
     """
+    st.markdown(is_mobile, unsafe_allow_html=True)
     
-    for i, row in chart_data.iterrows():
-        short_name = row["שם_קצר"]
-        icon = row["אייקון"]
-        color = row["צבע"]
-        
-        mobile_labels_html += f"""
-        <div class="mobile-label-item">
-            <div class="mobile-icon-circle" style="background-color: {color};">{icon}</div>
-            <div class="mobile-label-text">{short_name}</div>
-        </div>
-        """
+    # יצירת כרטיסיה למידע שנבחר
+    info_container = st.empty()
     
-    mobile_labels_html += """
-    </div>
-    """
-    
-    st.markdown(mobile_labels_html, unsafe_allow_html=True)
-    
-    # יצירת גרף אינטראקטיבי חדש בהשראת הקוד הריאקט
+    # יצירת גרף פשוט יותר
     fig = go.Figure()
     
-    # הוספת אזור צבעוני ברקע להמחשת רמות החירות
-    fig.add_trace(go.Scatter(
-        x=[events[0], events[-1]],
-        y=[10, 10],
-        fill='tozeroy',
-        fillcolor='rgba(144, 238, 144, 0.2)',
-        line=dict(width=0),
-        showlegend=False,
-        hoverinfo='none'
-    ))
-    
-    # הוספת קו החירות עם החלקה
+    # הוספת קו החירות
     fig.add_trace(go.Scatter(
         x=events,
         y=freedom_level,
         mode='lines',
         line=dict(
-            width=3, 
+            width=4, 
             color='#8000FF', 
             shape='spline',
             smoothing=1.3
@@ -398,27 +328,26 @@ with tab1:
         hoverinfo='none'
     ))
     
-    # הוספת נקודות אינטראקטיביות לכל שלב
+    # הוספת נקודות על הקו לכל שלב
     for i, row in chart_data.iterrows():
+        # הוספת נקודה בלבד על הגרף (ללא טקסט)
         fig.add_trace(go.Scatter(
             x=[row["אירוע"]],
             y=[row["מדד_חירות"]],
-            mode='markers+text',
+            mode='markers',
             marker=dict(
-                size=30, 
+                size=25, 
                 color=row["צבע"],
                 symbol='circle',
                 line=dict(width=2, color='white')
             ),
-            text=row["אייקון"],
-            textposition="middle center",
-            textfont=dict(size=16),
             name=row["אירוע"],
             customdata=[[
                 row["אירוע"], 
                 row["הערה"],
                 row["טכנולוגיה"],
-                row["מדד_חירות"]
+                row["מדד_חירות"],
+                row["אייקון"]
             ]],
             hovertemplate="<b>%{customdata[0]}</b><br>" + 
                           "מדד החירות: %{customdata[3]}<br>" +
@@ -426,35 +355,42 @@ with tab1:
                           "<i>%{customdata[1]}</i><extra></extra>"
         ))
     
-    # עיצוב לגרף הראשי (desktop)
+    # הוספת אייקונים בתחתית הגרף
+    for i, row in chart_data.iterrows():
+        fig.add_annotation(
+            x=row["אירוע"],
+            y=0,
+            text=row["אייקון"],
+            showarrow=False,
+            font=dict(size=20),
+            yshift=-30
+        )
+    
+    # עיצוב פשוט יותר לגרף
     fig.update_layout(
         template="plotly_white",
         font=dict(family="Rubik, sans-serif", size=14),
-        plot_bgcolor='rgba(248,249,250,0.8)',
+        plot_bgcolor='#F8F9FA',
         xaxis=dict(
             title="",
             showgrid=False,
             zeroline=False,
-            showline=True,
-            linecolor='rgba(0,0,0,0.2)',
-            tickmode='array',
-            tickvals=events,
-            ticktext=["" for _ in events],  # הסרת התוויות בציר X למובייל
-            tickfont=dict(size=1, family="Rubik, sans-serif", color='rgba(0,0,0,0.01)')  # גודל מינימלי והצבע שקוף כמעט לחלוטין
+            showline=False,
+            showticklabels=False
         ),
         yaxis=dict(
-            title="רמת החירות",
-            range=[0, 10],
+            title="רמת החירות הדיגיטלית",
+            range=[0, 11],
             showgrid=True,
-            gridcolor='rgba(0,0,0,0.07)',
+            gridcolor='rgba(0,0,0,0.1)',
             zeroline=False,
-            tickvals=list(range(1, 10, 2)),
-            ticktext=["עבדות<br>דיגיטלית", "", "חירות<br>מוגבלת", "", "חירות<br>משמעותית"],
+            tickvals=[1, 3, 5, 8, 10],
+            ticktext=["1", "3", "5", "8", "10"],
             tickfont=dict(size=12, family="Rubik, sans-serif")
         ),
-        margin=dict(l=10, r=10, t=10, b=10),
+        margin=dict(l=20, r=20, t=30, b=50),
         showlegend=False,
-        height=500,
+        height=400,
         hoverlabel=dict(
             bgcolor="white",
             font_size=14,
@@ -474,73 +410,44 @@ with tab1:
         'responsive': True
     }
     
-    # התאמות למובייל - אפשרויות בתצוגות שונות
-    col1, col2 = st.columns([2, 1])
+    # הצגת הגרף בלי חלוקה לעמודות (יותר פשוט)
+    st.plotly_chart(
+        fig, 
+        config=config,
+        use_container_width=True
+    )
     
-    # הצגת כרטיסיות מידע וסלייסר בחירה בצד ימין
-    with col2:
-        # הצגת כרטיסיות מידע
-        st.markdown("""
-        <div style="font-size:16px; font-family: Rubik, sans-serif; margin-bottom:15px; text-align:center;">
-            <b>בחרו שלב לפרטים:</b>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # רשימה ללחיצה עם סלייסר יפה
-        selected_event = st.select_slider(
-            label="בחרו שלב במסע הדאטה",
-            options=range(len(events)),
-            format_func=lambda x: f"{safe_icons[x]} {short_names[x]}",
-            label_visibility="collapsed"
-        )
-        
-        if selected_event is not None:
-            # כרטיסיית מידע
-            st.markdown(f"""
-            <div style="background-color:{chart_data.iloc[selected_event]['צבע']}20; padding:15px; border-radius:10px; border-right:4px solid {chart_data.iloc[selected_event]['צבע']}; font-family:Rubik, sans-serif; margin-top:15px;">
-                <h4 style="margin-top:0;">{chart_data.iloc[selected_event]['אייקון']} {chart_data.iloc[selected_event]['אירוע']}</h4>
-                <p style="font-size:14px; margin-bottom:5px;"><b>מדד החירות:</b> {chart_data.iloc[selected_event]['מדד_חירות']}/10</p>
-                <p style="font-size:14px; margin-bottom:5px;"><b>טכנולוגיה:</b> {chart_data.iloc[selected_event]['טכנולוגיה']}</p>
-                <p style="font-size:14px; font-style:italic;">{chart_data.iloc[selected_event]['הערה']}</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # הצגת מד התקדמות ויזואלי למדד החירות
-            st.markdown(f"""
-            <div style="margin-top:15px;">
-                <div style="width:100%; background-color:#e0e0e0; height:20px; border-radius:10px; overflow:hidden;">
-                    <div style="width:{chart_data.iloc[selected_event]['מדד_חירות']*10}%; height:100%; background-color:{chart_data.iloc[selected_event]['צבע']}; text-align:center; color:white; font-size:12px; line-height:20px;">
-                        {chart_data.iloc[selected_event]['מדד_חירות']}/10
-                    </div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-    
-    # הצגת הגרף בצד שמאל (בעברית זה מימין לשמאל, אז הגרף יהיה משמאל והסלייסר מימין)
-    with col1:
-        # הצגת הגרף עם הגדרות משודרגות
-        chart_container = st.plotly_chart(
-            fig, 
-            config=config,
-            use_container_width=True
-        )
-    
-    # מקרא למדדי החירות - הוספנו מהקוד החדש
+    # הוספת אזור להצגת אינפורמציה כאשר הגרף נלחץ
     st.markdown("""
-    <div style="background-color:#f8f9fa; padding:15px; border-radius:8px; margin-top:20px; font-family:Rubik, sans-serif;">
-        <h4 style="color:#8000FF; margin-top:0; font-family:Rubik, sans-serif;">🔑 מקרא רמות החירות:</h4>
-        <div style="display:flex; flex-wrap:wrap; gap:15px; margin-top:10px;">
-            <div style="display:flex; align-items:center;">
-                <div style="width:16px; height:16px; background-color:#8B4513; border-radius:50%; margin-left:8px;"></div>
-                <span style="font-size:14px;">1-2: עבדות דיגיטלית</span>
+    <div style="text-align:center; margin-top:-10px; margin-bottom:20px;">
+        <div style="display:inline-block; background-color:#f8f9fa; padding:10px 20px; border-radius:50px;">
+            <span style="font-size:24px;">👆</span>
+            <span style="font-family: Rubik, sans-serif; font-size:16px; margin-right:5px;">לחצו על נקודה בגרף לפרטים</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # מקרא פשוט יותר ברוח התמונה שהצגת - בצד ימין
+    st.markdown("""
+    <div style="text-align:right; margin-top:10px; font-family: Rubik, sans-serif;">
+        <h4 style="color:#8000FF; font-size:16px; margin-bottom:5px;">
+            <span style="margin-left:10px;">🔑</span> מקרא רמות החירות:
+        </h4>
+        <div style="display:flex; flex-direction:column; gap:8px; max-width:300px; margin-right:auto;">
+            <div style="display:flex; align-items:center; justify-content:flex-end;">
+                <span style="font-size:14px;">עבדות דיגיטלית</span>
+                <div style="width:14px; height:14px; background-color:#8B0000; border-radius:50%; margin-right:8px;"></div>
+                <span style="margin-right:5px; font-weight:bold;">1-2:</span>
             </div>
-            <div style="display:flex; align-items:center;">
-                <div style="width:16px; height:16px; background-color:#1E90FF; border-radius:50%; margin-left:8px;"></div>
-                <span style="font-size:14px;">3-5: חירות מוגבלת</span>
+            <div style="display:flex; align-items:center; justify-content:flex-end;">
+                <span style="font-size:14px;">חירות מוגבלת</span>
+                <div style="width:14px; height:14px; background-color:#1E90FF; border-radius:50%; margin-right:8px;"></div>
+                <span style="margin-right:5px; font-weight:bold;">3-5:</span>
             </div>
-            <div style="display:flex; align-items:center;">
-                <div style="width:16px; height:16px; background-color:#32CD32; border-radius:50%; margin-left:8px;"></div>
-                <span style="font-size:14px;">6-10: חירות דיגיטלית מלאה</span>
+            <div style="display:flex; align-items:center; justify-content:flex-end;">
+                <span style="font-size:14px;">חירות דיגיטלית מלאה</span>
+                <div style="width:14px; height:14px; background-color:#8A2BE2; border-radius:50%; margin-right:8px;"></div>
+                <span style="margin-right:5px; font-weight:bold;">6-10:</span>
             </div>
         </div>
     </div>
@@ -548,7 +455,7 @@ with tab1:
     
     # הסבר נוסף אחרי הגרף
     st.markdown("""
-    <div style="background-color:rgba(128,0,255,0.05); padding:15px; border-radius:8px; border-right:4px solid #8000FF; margin-top:30px; font-family:Rubik, sans-serif;">
+    <div style="background-color:rgba(128,0,255,0.05); padding:15px; border-radius:8px; border-right:4px solid #8000FF; margin-top:20px; font-family:Rubik, sans-serif;">
         <h4 style="color:#8000FF; margin-top:0; font-family:Rubik, sans-serif; display:flex; align-items:center;">
             <span style="margin-left:10px;">⭐</span> המסע מעבדות לחירות בעולם הדאטה
         </h4>
@@ -561,7 +468,6 @@ with tab1:
         <p>בכל שלב במסע, אנו משתחררים יותר מעבודה ידנית ומתקרבים לחירות דיגיטלית אמיתית!</p>
     </div>
     """, unsafe_allow_html=True)
-
 # טאב 2 – שאלון הבן הדאטאיסט
 with tab2:
     st.markdown("<h3 style='font-family: Rubik, sans-serif;'>🔍 איזה בן דאטה אתה?</h3>", unsafe_allow_html=True)
