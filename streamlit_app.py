@@ -242,7 +242,7 @@ with tab1:
     </div>
     """, unsafe_allow_html=True)
     
-    # נתונים למדד החירות
+    # נתונים למדד החירות - מותאם לפי הנתונים מקובץ הריאקט החדש
     events = [
         "שעבוד במצרים",
         "הולדת משה", 
@@ -279,6 +279,7 @@ with tab1:
     short_names = ["שעבוד", "משה", "הסנה", "המכות", "יציאה", "קריעה", "הארץ"]
     
     # אייקונים טקסטואליים בטוחים שלא יגרמו לבעיות תאימות
+    # עודכן לפי הקוד החדש, אך נשארו 7 שלבים
     safe_icons = ["🧱", "👶", "🔥", "🐸", "👣", "💧", "🏞️"]
     
     # יצירת DataFrame
@@ -368,7 +369,7 @@ with tab1:
     
     st.markdown(mobile_labels_html, unsafe_allow_html=True)
     
-    # יצירת גרף אינטראקטיבי חדש
+    # יצירת גרף אינטראקטיבי חדש בהשראת הקוד הריאקט
     fig = go.Figure()
     
     # הוספת אזור צבעוני ברקע להמחשת רמות החירות
@@ -442,7 +443,7 @@ with tab1:
             tickfont=dict(size=1, family="Rubik, sans-serif", color='rgba(0,0,0,0.01)')  # גודל מינימלי והצבע שקוף כמעט לחלוטין
         ),
         yaxis=dict(
-            title="",
+            title="רמת החירות",
             range=[0, 10],
             showgrid=True,
             gridcolor='rgba(0,0,0,0.07)',
@@ -496,7 +497,7 @@ with tab1:
         if selected_event is not None:
             # כרטיסיית מידע
             st.markdown(f"""
-            <div style="background-color:{chart_data.iloc[selected_event]['צבע']}; padding:15px; border-radius:10px; color:white; font-family:Rubik, sans-serif; margin-top:15px;">
+            <div style="background-color:{chart_data.iloc[selected_event]['צבע']}20; padding:15px; border-radius:10px; border-right:4px solid {chart_data.iloc[selected_event]['צבע']}; font-family:Rubik, sans-serif; margin-top:15px;">
                 <h4 style="margin-top:0;">{chart_data.iloc[selected_event]['אייקון']} {chart_data.iloc[selected_event]['אירוע']}</h4>
                 <p style="font-size:14px; margin-bottom:5px;"><b>מדד החירות:</b> {chart_data.iloc[selected_event]['מדד_חירות']}/10</p>
                 <p style="font-size:14px; margin-bottom:5px;"><b>טכנולוגיה:</b> {chart_data.iloc[selected_event]['טכנולוגיה']}</p>
@@ -523,6 +524,27 @@ with tab1:
             config=config,
             use_container_width=True
         )
+    
+    # מקרא למדדי החירות - הוספנו מהקוד החדש
+    st.markdown("""
+    <div style="background-color:#f8f9fa; padding:15px; border-radius:8px; margin-top:20px; font-family:Rubik, sans-serif;">
+        <h4 style="color:#8000FF; margin-top:0; font-family:Rubik, sans-serif;">🔑 מקרא רמות החירות:</h4>
+        <div style="display:flex; flex-wrap:wrap; gap:15px; margin-top:10px;">
+            <div style="display:flex; align-items:center;">
+                <div style="width:16px; height:16px; background-color:#8B4513; border-radius:50%; margin-left:8px;"></div>
+                <span style="font-size:14px;">1-2: עבדות דיגיטלית</span>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <div style="width:16px; height:16px; background-color:#1E90FF; border-radius:50%; margin-left:8px;"></div>
+                <span style="font-size:14px;">3-5: חירות מוגבלת</span>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <div style="width:16px; height:16px; background-color:#32CD32; border-radius:50%; margin-left:8px;"></div>
+                <span style="font-size:14px;">6-10: חירות דיגיטלית מלאה</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     # הסבר נוסף אחרי הגרף
     st.markdown("""
